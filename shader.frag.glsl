@@ -1,6 +1,6 @@
+#version 300 es
 //Origin https://www.shadertoy.com/view/ll2SRy
 
-#version 300 es
 precision mediump float;
 
 uniform vec2 iResolution;
@@ -43,7 +43,7 @@ void main() {
     float thD = 0.035;
 
     for (int i = 0; i < 56; i++) {
-        if (layers > 15.0  col.x > 1.0  t > 10.0) break;
+        if (layers > 15.0 || col.x > 1.0 || t > 10.0) break;
 
         sp = ro + rd * t;
         d = map(sp);
