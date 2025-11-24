@@ -22,7 +22,6 @@
     grid-template-columns: 360px 1fr;
     padding: 12px 12px 0 12px;
     box-sizing: border-box;
-    height: auto;
     user-select: none;
   }
   #logoContainer {
@@ -109,7 +108,7 @@
   <div id="logoContainer">
     <pre id="asciiLogo"></pre>
   </div>
-  <div></div> <!-- пустая правая колонка для баланса -->
+  <div></div>
 </header>
 
 <div id="dividerContainer">
@@ -124,41 +123,37 @@
 </aside>
 
 <script>
-  // Анимированный заголовок ASCII
+(async function() {
+  // ASCII анимированный логотип (как было)
   const frames = [
-`+--------------------+
+    `+--------------------+
 |    САВЕЛИЙ          |
 |    ПОРТФОЛИО        |
 +--------------------+`,
-`+--------------------+
+    `+--------------------+
 |   САВЕЛИЙ —         |
 |   ASCII ЛОГО        |
 +--------------------+`,
-`+--------------------+
+    `+--------------------+
 |   SAVELIY           |
 |   PORTFOLIO         |
 +--------------------+`
   ];
-
-  const frameDuration = 1000; // ms
-
+  const frameDuration = 1000;
   const logoEl = document.getElementById('asciiLogo');
   let currentFrame = 0;
-
   function showFrame() {
     logoEl.textContent = frames[currentFrame];
     currentFrame = (currentFrame + 1) % frames.length;
   }
-
   showFrame();
   setInterval(showFrame, frameDuration);
 
-  // Адаптивный ASCII-разделитель под заголовком, учитывая ширину панели справа и отступ слева
+  // ASCII разделитель под заголовком с учётом shaderPanel справа
   const dividerEl = document.getElementById('divider');
   const dividerContainer = document.getElementById('dividerContainer');
   const dividerChar = '=';
-  const sidePaddingPx = 12; // отступ слева и справа (справа уже был 12px, ставим такой же слева)
-
+  const sidePaddingPx = 12;
   function getCharWidth() {
     const span = document.createElement('span');
     span.style.fontFamily = 'Menlo, Consolas, monospace';
@@ -171,197 +166,147 @@
     document.body.removeChild(span);
     return w;
   }
-
   function updateDivider() {
     const charWidth = getCharWidth();
-
     const windowWidth = window.innerWidth;
     const shaderPanel = document.getElementById('shaderPanel');
     const shaderPanelStyles = window.getComputedStyle(shaderPanel);
     const shaderPanelWidth = shaderPanel.offsetWidth
       + parseInt(shaderPanelStyles.marginLeft || '0')
       + parseInt(shaderPanelStyles.marginRight || '0');
-
-    // Доступная ширина для разделителя — от левого отступа до левой границы панели - правый отступ
     const availableWidthPx = windowWidth - shaderPanelWidth - sidePaddingPx * 2;
-
-    // Применяем отступы к контейнеру разделителя
     dividerContainer.style.paddingLeft = sidePaddingPx + 'px';
     dividerContainer.style.paddingRight = sidePaddingPx + 'px';
-
-    // Задаём ширину контейнеру под разделитель в px (оставим 100% ширины, чтобы растягивался)
     dividerContainer.style.width = (availableWidthPx + sidePaddingPx * 2) + 'px';
-
     const totalChars = Math.floor(availableWidthPx / charWidth);
     const lineLength = Math.max(totalChars, 0);
-
-    // Рисуем строку символов
-    const line = dividerChar.repeat(lineLength);
-
-    dividerEl.textContent = line;
+    dividerEl.textContent = dividerChar.repeat(lineLength);
   }
-
   updateDivider();
   window.addEventListener('resize', updateDivider);
 
-  // GLSL Shader live editor + visualizer
-  (function(){
-    const canvas = document.getElementById('glCanvas');
-    const errorBox = document.getElementById('shaderError');
-    const editor = document.getElementById('shaderEditor');
-    const shaderDivider = document.getElementById('shaderDivider');
+  // Подгружаем шейдеры через fetch
+  const vertexSrc = await fetch('shader.vert.glsl').then(r => r.text());
+  let fragmentSrc = await fetch('shader.frag.glsl').then(r => r.text());
 
-    // Создадим ASCII разделитель под canvas
-    function updateShaderDivider() {
-      const widthPx = canvas.clientWidth;
-      const charWidth = getCharWidth();
-      const charsCount = Math.floor(widthPx / charWidth);
-      const line = '-'.repeat(charsCount);
-      shaderDivider.textContent = line;
+  const canvas = document.getElementById('glCanvas');
+  const errorBox = document.getElementById('shaderError');
+  const editor = document.getElementById('shaderEditor');
+  const shaderDivider = document.getElementById('shaderDivider');
+
+  editor.value = fragmentSrc.trim();
+
+  function compileShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      throw new Error(gl.getShaderInfoLog(shader));
     }
+    return shader;
+  }
+
+  let gl = canvas.getContext('webgl2');
+  if(!gl){
+    errorBox.textContent = 'WebGL2 не поддерживается в этом браузере.';
+    return;
+  }
+
+  let program = null;
+  let positionAttribLoc = -1;
+  let iResolutionLoc = null;
+  let iTimeLoc = null;
+
+  function buildProgram() {
+    if(program) {
+      gl.deleteProgram(program);
+      program = null;
+    }
+    errorBox.textContent = '';
+    try {
+      const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vertexSrc);
+      const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, editor.value);
+      const prog = gl.createProgram();
+      gl.attachShader(prog, vertexShader);
+      gl.attachShader(prog, fragmentShader);
+      gl.linkProgram(prog);
+      if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){
+        throw new Error(gl.getProgramInfoLog(prog));
+      }
+      program = prog;
+      positionAttribLoc = gl.getAttribLocation(program, 'a_position');
+      iResolutionLoc = gl.getUniformLocation(program, 'iResolution');
+      iTimeLoc = gl.getUniformLocation(program, 'iTime');
+      errorBox.style.display = 'none';
+    } catch(e) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = 'Ошибка шейдера:\n' + e.message;
+      program = null;
+    }
+  }
+
+  buildProgram();
+
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+
+  function updateShaderDivider() {
+    const widthPx = canvas.clientWidth;
+    const charWidth = getCharWidth();
+    const charsCount = Math.floor(widthPx / charWidth);
+    shaderDivider.textContent = '-'.repeat(charsCount);
+  }
+  updateShaderDivider();
+  window.addEventListener('resize', () => {
+    updateDivider();
     updateShaderDivider();
-    window.addEventListener('resize', updateShaderDivider);
+    resizeCanvas();
+  });
 
-    // Попытка получить WebGL2 контекст
-    let gl = canvas.getContext('webgl2');
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.clientWidth * dpr;
+    const height = canvas.clientHeight * dpr;
+    if(canvas.width !== width || canvas.height !== height){
+      canvas.width = width;
+      canvas.height = height;
+      gl.viewport(0, 0, width, height);
+    }
+  }
+  resizeCanvas();
 
-    if(!gl){
-      errorBox.textContent = 'WebGL2 не поддерживается в этом браузере.';
+  let startTime = performance.now();
+  function render(time) {
+    resizeCanvas();
+    if(!program){
+      requestAnimationFrame(render);
       return;
     }
-
-    // Вершинный шейдер GLSL ES 3.0
-    const vertexSrc = `#version 300 es
-in vec2 a_position;
-void main() {
-  gl_Position = vec4(a_position, 0.0, 1.0);
-}
-`;
-
-    // Исходный фрагментный шейдер GLSL ES 3.0
-    const defaultFragmentSrc = `#version 300 es
-precision mediump float;
-uniform vec2 iResolution;
-uniform float iTime;
-out vec4 fragColor;
-void main(){
-  vec2 uv = gl_FragCoord.xy / iResolution.xy;
-  float v = sin(uv.x*10.0 + iTime) + cos(uv.y*10.0 - iTime*0.6);
-  vec3 col = vec3(
-    0.5 + 0.5*sin(iTime + uv.x*6.0),
-    0.3 + 0.7*sin(iTime*0.7 + uv.y*4.0),
-    0.4 + 0.6*cos(iTime + uv.x*3.0)
-  ) * (0.6 + 0.4*v);
-  fragColor = vec4(col,1.0);
-}
-`;
-
-    editor.value = defaultFragmentSrc.trim();
-
-    function compileShader(type, source) {
-      const shader = gl.createShader(type);
-      gl.shaderSource(shader, source);
-      gl.compileShader(shader);
-      if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS)){
-        throw new Error(gl.getShaderInfoLog(shader));
-      }
-      return shader;
+    gl.clearColor(0,0,0,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(program);
+    if(positionAttribLoc >= 0){
+      gl.enableVertexAttribArray(positionAttribLoc);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.vertexAttribPointer(positionAttribLoc, 2, gl.FLOAT, false, 0, 0);
     }
-
-    let program = null;
-    let positionAttribLoc = -1;
-    let iResolutionLoc = null;
-    let iTimeLoc = null;
-
-    function buildProgram() {
-      if(program) {
-        gl.deleteProgram(program);
-        program = null;
-      }
-      errorBox.textContent = '';
-      try {
-        const vertexShader = compileShader(gl.VERTEX_SHADER, vertexSrc);
-        const fragmentShader = compileShader(gl.FRAGMENT_SHADER, editor.value);
-        const prog = gl.createProgram();
-        gl.attachShader(prog, vertexShader);
-        gl.attachShader(prog, fragmentShader);
-        gl.linkProgram(prog);
-        if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){
-          throw new Error(gl.getProgramInfoLog(prog));
-        }
-        program = prog;
-        positionAttribLoc = gl.getAttribLocation(program, 'a_position');
-        iResolutionLoc = gl.getUniformLocation(program, 'iResolution');
-        iTimeLoc = gl.getUniformLocation(program, 'iTime');
-        errorBox.style.display = 'none';
-      } catch(e) {
-        errorBox.style.display = 'block';
-        errorBox.textContent = 'Ошибка шейдера:\n' + e.message;
-        program = null;
-      }
-    }
-
-    buildProgram();
-
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-        -1, -1,
-         1, -1,
-        -1,  1,
-         1,  1
-      ]),
-      gl.STATIC_DRAW
-    );
-
-    function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      const width = canvas.clientWidth * dpr;
-      const height = canvas.clientHeight * dpr;
-      if(canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-        gl.viewport(0, 0, width, height);
-      }
-      updateShaderDivider();
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    let startTime = performance.now();
-
-    function render(time) {
-      resizeCanvas();
-      if(!program) {
-        requestAnimationFrame(render);
-        return;
-      }
-      gl.clearColor(0,0,0,1);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.useProgram(program);
-      if(positionAttribLoc >= 0){
-        gl.enableVertexAttribArray(positionAttribLoc);
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.vertexAttribPointer(positionAttribLoc, 2, gl.FLOAT, false, 0, 0);
-      }
-      if(iResolutionLoc) gl.uniform2f(iResolutionLoc, canvas.width, canvas.height);
-      if(iTimeLoc) gl.uniform1f(iTimeLoc, (time - startTime) * 0.001);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      requestAnimationFrame(render);
-    }
+    if(iResolutionLoc) gl.uniform2f(iResolutionLoc, canvas.width, canvas.height);
+    if(iTimeLoc) gl.uniform1f(iTimeLoc, (time - startTime) * 0.001);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
 
-    let debounceTimer = null;
-    editor.addEventListener('input', () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        buildProgram();
-      }, 300);
-    });
+  let debounceTimer = null;
+  editor.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      buildProgram();
+    }, 300);
+  });
 
-  })();
+})();
 </script>
 
 </body>
