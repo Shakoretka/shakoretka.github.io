@@ -19,7 +19,7 @@
   }
   header {
     display: grid;
-    grid-template-columns: 360px 1fr; /* левая фиксированная, правая гибкая */
+    grid-template-columns: 360px 1fr;
     padding: 12px 12px 0 12px;
     box-sizing: border-box;
     height: auto;
@@ -32,13 +32,12 @@
     white-space: pre;
     font-size: 16px;
     line-height: 1;
-    height: 96px; /* фиксированная высота для зоны логотипа */
+    height: 96px;
   }
   #asciiLogo {
     text-align: center;
     width: 100%;
   }
-
   #dividerContainer {
     width: 100%;
     box-sizing: border-box;
@@ -53,7 +52,6 @@
     overflow: hidden;
     display: block;
   }
-
   #shaderPanel {
     position: fixed;
     top: 12px;
@@ -67,11 +65,9 @@
     font-family: Menlo, Consolas, monospace;
     user-select: none;
     color: #0f0;
-
     display: flex;
     flex-direction: column;
   }
-
   #glCanvas {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -211,7 +207,6 @@
   // GLSL Shader live editor + visualizer
   (function(){
     const canvas = document.getElementById('glCanvas');
-    const gl = canvas.getContext('webgl');
     const errorBox = document.getElementById('shaderError');
     const editor = document.getElementById('shaderEditor');
     const shaderDivider = document.getElementById('shaderDivider');
@@ -227,24 +222,28 @@
     updateShaderDivider();
     window.addEventListener('resize', updateShaderDivider);
 
+    // Попытка получить WebGL2 контекст
+    let gl = canvas.getContext('webgl2');
+
     if(!gl){
-      errorBox.textContent = 'WebGL не поддерживается в этом браузере.';
+      errorBox.textContent = 'WebGL2 не поддерживается в этом браузере.';
       return;
     }
 
-    // Вершинный шейдер (фиксированный)
-    const vertexSrc = `
-      attribute vec2 a_position;
-      void main() {
-        gl_Position = vec4(a_position, 0.0, 1.0);
-      }
-    `;
+    // Вершинный шейдер GLSL ES 3.0
+    const vertexSrc = `#version 300 es
+in vec2 a_position;
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}
+`;
 
-    // Исходный фрагментный шейдер по умолчанию
-    const defaultFragmentSrc = `
+    // Исходный фрагментный шейдер GLSL ES 3.0
+    const defaultFragmentSrc = `#version 300 es
 precision mediump float;
 uniform vec2 iResolution;
 uniform float iTime;
+out vec4 fragColor;
 void main(){
   vec2 uv = gl_FragCoord.xy / iResolution.xy;
   float v = sin(uv.x*10.0 + iTime) + cos(uv.y*10.0 - iTime*0.6);
@@ -253,7 +252,7 @@ void main(){
     0.3 + 0.7*sin(iTime*0.7 + uv.y*4.0),
     0.4 + 0.6*cos(iTime + uv.x*3.0)
   ) * (0.6 + 0.4*v);
-  gl_FragColor = vec4(col,1.0);
+  fragColor = vec4(col,1.0);
 }
 `;
 
@@ -339,6 +338,7 @@ void main(){
         requestAnimationFrame(render);
         return;
       }
+      gl.clearColor(0,0,0,1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
       if(positionAttribLoc >= 0){
