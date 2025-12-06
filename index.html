@@ -1,313 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>ASCII Portfolio + GLSL Shader Editor</title>
-<style>
-  html, body {
-    margin: 0; padding: 0;
-    height: 100%;
-    background: #0b0b0b;
-    color: #e6e6e6;
-    font-family: Menlo, Consolas, monospace;
-  }
-  body {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-  header {
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    padding: 12px 12px 0 12px;
-    box-sizing: border-box;
-    user-select: none;
-  }
-  #logoContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: pre;
-    font-size: 16px;
-    line-height: 1;
-    height: 96px;
-  }
-  #asciiLogo {
-    text-align: center;
-    width: 100%;
-  }
-  #dividerContainer {
-    width: 100%;
-    box-sizing: border-box;
-  }
-  #divider {
-    font-family: Menlo, Consolas, monospace;
-    white-space: pre;
-    color: #666;
-    user-select: none;
-    margin: 8px 0;
-    text-align: left;
-    overflow: hidden;
-    display: block;
-  }
-  #shaderPanel {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    bottom: 12px;
-    width: 320px;
-    background: #111;
-    border: 1px solid #444;
-    padding: 8px;
-    box-sizing: border-box;
-    font-family: Menlo, Consolas, monospace;
-    user-select: none;
-    color: #0f0;
-    display: flex;
-    flex-direction: column;
-  }
-  #glCanvas {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    background: black;
-    border: 1px solid #222;
-    flex-shrink: 0;
-  }
-  #shaderDivider {
-    white-space: pre;
-    margin: 4px 0;
-    color: #666;
-    user-select: none;
-    text-align: center;
-  }
-  #shaderEditor {
-    width: 100%;
-    flex-grow: 1;
-    background: #111;
-    color: #0f0;
-    border: none;
-    resize: none;
-    font-family: Menlo, Consolas, monospace;
-    padding: 8px;
-    box-sizing: border-box;
-    overflow-y: auto;
-  }
-  #shaderError {
-    margin-top: 4px;
-    color: #f55;
-    font-size: 12px;
-    min-height: 16px;
-    white-space: pre-wrap;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Tag Filter Grid</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<header>
-  <div id="logoContainer">
-    <pre id="asciiLogo"></pre>
+  <!-- Блок тегов с заголовком и кнопкой очистки -->
+  <section class="tags-wrapper">
+    <header class="tags-header">
+      <h2 class="tags-title">Tag's</h2>
+      <button id="clear-btn" class="clear-btn" title="Clear selected tags" aria-label="Clear selected tags">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M2.146 3.146a.5.5 0 0 1 .708 0L8 8.293l5.146-5.147a.5.5 0 0 1 
+          .708.708L8.707 9l5.147 5.146a.5.5 0 0 1-.708.708L8 9.707l-5.146 5.147a.5.5 
+          0 0 1-.708-.708L7.293 9 2.146 3.854a.5.5 0 0 1 0-.708z"/>
+        </svg>
+        Clear
+      </button>
+    </header>
+
+    <div class="tags" role="list">
+      <button class="tag" data-value="art">Art</button>
+      <button class="tag" data-value="tech">Tech</button>
+      <button class="tag" data-value="design">Design</button>
+      <button class="tag" data-value="games">Games</button>
+    </div>
+  </section>
+
+  <!-- Сетка -->
+  <main>
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <!-- Модальное окно -->
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+
+      <button class="close-btn" onclick="closeModal()">✕</button>
+
+      <div class="carousel">
+
+        <!-- Контейнер медиа -->
+        <div id="modal-media" class="modal-media-box">
+          <img id="modal-image" class="modal-media-el" style="display:none;" />
+          <video id="modal-video" class="modal-media-el" autoplay muted loop playsinline style="display:none;"></video>
+        </div>
+
+        <button class="arrow left" onclick="prevImage()">❮</button>
+        <button class="arrow right" onclick="nextImage()">❯</button>
+      </div>
+
+      <h3 id="modal-title" class="modal-title"></h3>
+      <p id="modal-desc" class="modal-desc"></p>
+
+    </div>
   </div>
-  <div></div>
-</header>
+  <script src="script.js?v=2"></script>
 
-<div id="dividerContainer">
-  <div id="divider"></div>
-</div>
-
-<aside id="shaderPanel">
-  <canvas id="glCanvas"></canvas>
-  <pre id="shaderDivider"></pre>
-  <textarea id="shaderEditor" spellcheck="false"></textarea>
-  <div id="shaderError"></div>
-</aside>
-
-<script>
-(async function() {
-  // ASCII анимированный логотип (как было)
-  const frames = [
-    `+--------------------+
-|    САВЕЛИЙ          |
-|    ПОРТФОЛИО        |
-+--------------------+`,
-    `+--------------------+
-|   САВЕЛИЙ —         |
-|   ASCII ЛОГО        |
-+--------------------+`,
-    `+--------------------+
-|   SAVELIY           |
-|   PORTFOLIO         |
-+--------------------+`
-  ];
-  const frameDuration = 1000;
-  const logoEl = document.getElementById('asciiLogo');
-  let currentFrame = 0;
-  function showFrame() {
-    logoEl.textContent = frames[currentFrame];
-    currentFrame = (currentFrame + 1) % frames.length;
-  }
-  showFrame();
-  setInterval(showFrame, frameDuration);
-
-  // ASCII разделитель под заголовком с учётом shaderPanel справа
-  const dividerEl = document.getElementById('divider');
-  const dividerContainer = document.getElementById('dividerContainer');
-  const dividerChar = '=';
-  const sidePaddingPx = 12;
-  function getCharWidth() {
-    const span = document.createElement('span');
-    span.style.fontFamily = 'Menlo, Consolas, monospace';
-    span.style.fontSize = window.getComputedStyle(dividerEl).fontSize;
-    span.style.position = 'absolute';
-    span.style.visibility = 'hidden';
-    span.textContent = 'A';
-    document.body.appendChild(span);
-    const w = span.getBoundingClientRect().width;
-    document.body.removeChild(span);
-    return w;
-  }
-  function updateDivider() {
-    const charWidth = getCharWidth();
-    const windowWidth = window.innerWidth;
-    const shaderPanel = document.getElementById('shaderPanel');
-    const shaderPanelStyles = window.getComputedStyle(shaderPanel);
-    const shaderPanelWidth = shaderPanel.offsetWidth
-      + parseInt(shaderPanelStyles.marginLeft || '0')
-      + parseInt(shaderPanelStyles.marginRight || '0');
-    const availableWidthPx = windowWidth - shaderPanelWidth - sidePaddingPx * 2;
-    dividerContainer.style.paddingLeft = sidePaddingPx + 'px';
-    dividerContainer.style.paddingRight = sidePaddingPx + 'px';
-    dividerContainer.style.width = (availableWidthPx + sidePaddingPx * 2) + 'px';
-    const totalChars = Math.floor(availableWidthPx / charWidth);
-    const lineLength = Math.max(totalChars, 0);
-    dividerEl.textContent = dividerChar.repeat(lineLength);
-  }
-  updateDivider();
-  window.addEventListener('resize', updateDivider);
-
-  // Подгружаем шейдеры через fetch
-  const vertexSrc = await fetch('shader.vert.glsl').then(r => r.text());
-  let fragmentSrc = await fetch('shader.frag.glsl').then(r => r.text());
-
-  const canvas = document.getElementById('glCanvas');
-  const errorBox = document.getElementById('shaderError');
-  const editor = document.getElementById('shaderEditor');
-  const shaderDivider = document.getElementById('shaderDivider');
-
-  editor.value = fragmentSrc.trim();
-
-  function compileShader(gl, type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      throw new Error(gl.getShaderInfoLog(shader));
-    }
-    return shader;
-  }
-
-  let gl = canvas.getContext('webgl2');
-  if(!gl){
-    errorBox.textContent = 'WebGL2 не поддерживается в этом браузере.';
-    return;
-  }
-
-  let program = null;
-  let positionAttribLoc = -1;
-  let iResolutionLoc = null;
-  let iTimeLoc = null;
-
-  function buildProgram() {
-    if(program) {
-      gl.deleteProgram(program);
-      program = null;
-    }
-    errorBox.textContent = '';
-    try {
-      const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vertexSrc);
-      const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, editor.value);
-      const prog = gl.createProgram();
-      gl.attachShader(prog, vertexShader);
-      gl.attachShader(prog, fragmentShader);
-      gl.linkProgram(prog);
-      if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){
-        throw new Error(gl.getProgramInfoLog(prog));
-      }
-      program = prog;
-      positionAttribLoc = gl.getAttribLocation(program, 'a_position');
-      iResolutionLoc = gl.getUniformLocation(program, 'iResolution');
-      iTimeLoc = gl.getUniformLocation(program, 'iTime');
-      errorBox.style.display = 'none';
-    } catch(e) {
-      errorBox.style.display = 'block';
-      errorBox.textContent = 'Ошибка шейдера:\n' + e.message;
-      program = null;
-    }
-  }
-
-  buildProgram();
-
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-
-  function updateShaderDivider() {
-    const widthPx = canvas.clientWidth;
-    const charWidth = getCharWidth();
-    const charsCount = Math.floor(widthPx / charWidth);
-    shaderDivider.textContent = '-'.repeat(charsCount);
-  }
-  updateShaderDivider();
-  window.addEventListener('resize', () => {
-    updateDivider();
-    updateShaderDivider();
-    resizeCanvas();
-  });
-
-  function resizeCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    const width = canvas.clientWidth * dpr;
-    const height = canvas.clientHeight * dpr;
-    if(canvas.width !== width || canvas.height !== height){
-      canvas.width = width;
-      canvas.height = height;
-      gl.viewport(0, 0, width, height);
-    }
-  }
-  resizeCanvas();
-
-  let startTime = performance.now();
-  function render(time) {
-    resizeCanvas();
-    if(!program){
-      requestAnimationFrame(render);
-      return;
-    }
-    gl.clearColor(0,0,0,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.useProgram(program);
-    if(positionAttribLoc >= 0){
-      gl.enableVertexAttribArray(positionAttribLoc);
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.vertexAttribPointer(positionAttribLoc, 2, gl.FLOAT, false, 0, 0);
-    }
-    if(iResolutionLoc) gl.uniform2f(iResolutionLoc, canvas.width, canvas.height);
-    if(iTimeLoc) gl.uniform1f(iTimeLoc, (time - startTime) * 0.001);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    requestAnimationFrame(render);
-  }
-  requestAnimationFrame(render);
-
-  let debounceTimer = null;
-  editor.addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      buildProgram();
-    }, 300);
-  });
-
-})();
-</script>
-
+  
+  <aside id="shaderPanel">
+    <canvas id="glCanvas"></canvas>
+    <pre id="shaderDivider"></pre>
+    <textarea id="shaderEditor" spellcheck="false"></textarea>
+    <div id="shaderError"></div>
+  </aside>
+  <script src="shader.js"></script>
 </body>
 </html>
