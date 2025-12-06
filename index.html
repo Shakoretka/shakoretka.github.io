@@ -7,66 +7,75 @@
 </head>
 <body>
 
-  <!-- Блок тегов с заголовком и кнопкой очистки -->
-  <section class="tags-wrapper">
-    <header class="tags-header">
-      <h2 class="tags-title">Tag's</h2>
-      <button id="clear-btn" class="clear-btn" title="Clear selected tags" aria-label="Clear selected tags">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-             viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M2.146 3.146a.5.5 0 0 1 .708 0L8 8.293l5.146-5.147a.5.5 0 0 1 
-          .708.708L8.707 9l5.147 5.146a.5.5 0 0 1-.708.708L8 9.707l-5.146 5.147a.5.5 
-          0 0 1-.708-.708L7.293 9 2.146 3.854a.5.5 0 0 1 0-.708z"/>
-        </svg>
-        Clear
-      </button>
-    </header>
+  <!-- ОБЁРТКА КОНТЕНТА, которая учитывает ширину #shaderPanel -->
+  <div class="content-with-shader">
 
-    <div class="tags" role="list">
-      <button class="tag" data-value="art">Art</button>
-      <button class="tag" data-value="tech">Tech</button>
-      <button class="tag" data-value="design">Design</button>
-      <button class="tag" data-value="games">Games</button>
-    </div>
-  </section>
+    <!-- Блок тегов -->
+    <section class="tags-wrapper">
+      <header class="tags-header">
+        <h2 class="tags-title">Tag's</h2>
+        <button id="clear-btn" class="clear-btn" title="Clear selected tags" aria-label="Clear selected tags">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+               viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M2.146 3.146a.5.5 0 0 1 .708 0L8 8.293l5.146-5.147a.5.5 0 0 1 
+            .708.708L8.707 9l5.147 5.146a.5.5 0 0 1-.708.708L8 9.707l-5.146 5.147a.5.5 
+            0 0 1-.708-.708L7.293 9 2.146 3.854a.5.5 0 0 1 0-.708z"/>
+          </svg>
+          Clear
+        </button>
+      </header>
 
-  <!-- Сетка -->
-  <main>
-    <div id="grid" class="grid"></div>
-  </main>
+      <div class="tags" role="list">
+        <button class="tag" data-value="art">Art</button>
+        <button class="tag" data-value="tech">Tech</button>
+        <button class="tag" data-value="design">Design</button>
+        <button class="tag" data-value="games">Games</button>
+      </div>
+    </section>
 
-  <!-- Модальное окно -->
-  <div class="modal-bg" id="modal-bg">
-    <div class="modal">
+    <!-- Сетка -->
+    <main>
+      <div id="grid" class="grid"></div>
+    </main>
 
-      <button class="close-btn" onclick="closeModal()">✕</button>
+    <!-- Модальное окно -->
+    <div class="modal-bg" id="modal-bg">
+      <div class="modal">
 
-      <div class="carousel">
+        <button class="close-btn" onclick="closeModal()">✕</button>
 
-        <!-- Контейнер медиа -->
-        <div id="modal-media" class="modal-media-box">
-          <img id="modal-image" class="modal-media-el" style="display:none;" />
-          <video id="modal-video" class="modal-media-el" autoplay muted loop playsinline style="display:none;"></video>
+        <div class="carousel">
+
+          <!-- Контейнер медиа -->
+          <div id="modal-media" class="modal-media-box">
+            <img id="modal-image" class="modal-media-el" style="display:none;" />
+            <video id="modal-video" class="modal-media-el" autoplay muted loop playsinline style="display:none;"></video>
+          </div>
+
+          <button class="arrow left" onclick="prevImage()">❮</button>
+          <button class="arrow right" onclick="nextImage()">❯</button>
         </div>
 
-        <button class="arrow left" onclick="prevImage()">❮</button>
-        <button class="arrow right" onclick="nextImage()">❯</button>
+        <h3 id="modal-title" class="modal-title"></h3>
+        <p id="modal-desc" class="modal-desc"></p>
+
       </div>
-
-      <h3 id="modal-title" class="modal-title"></h3>
-      <p id="modal-desc" class="modal-desc"></p>
-
     </div>
-  </div>
-  <script src="script.js?v=2"></script>
 
-  
+    <script src="script.js?v=2"></script>
+
+  </div> <!-- END content-with-shader -->
+
+
+  <!-- ФИКСИРОВАННАЯ ПАНЕЛЬ ШЕЙДЕРА -->
   <aside id="shaderPanel">
     <canvas id="glCanvas"></canvas>
     <pre id="shaderDivider"></pre>
     <textarea id="shaderEditor" spellcheck="false"></textarea>
     <div id="shaderError"></div>
   </aside>
+
   <script src="shader.js"></script>
+
 </body>
 </html>

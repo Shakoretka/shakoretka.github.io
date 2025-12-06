@@ -8,15 +8,15 @@
   --modal-text-color: #8b949e;  /* Средний серый для описаний */
 
   /* Радиусы */
-  --tag-border-radius: 8px;
-  --modal-border-radius: 16px;
-  --item-border-radius: 12px;
-  --carousel-border-radius: 12px;
+  --tag-border-radius: 6px;
+  --modal-border-radius: 6px;
+  --item-border-radius: 6px;
+  --carousel-border-radius: 6px;
 
   /* Отступы и размеры */
-  --padding-base: 20px;
-  --padding-small: 14px;
-  --gap-base: 20px;
+  --padding-base: 16px;
+  --padding-small: 16px;
+  --gap-base: 16px;
 
   /* Переходы и тени */
   --transition-speed: 0.3s;
@@ -363,6 +363,13 @@ body {
   white-space: pre-wrap;
 }
 
+.content-with-shader {
+  width: calc(100% - 340px); /* ширина панели + небольшой отступ */
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-right: 20px;
+}
+
 /* Адаптив */
 @media (max-width: 600px) {
   .grid {
@@ -381,5 +388,14 @@ body {
 
   .modal-desc {
     font-size: 14px;
+  }
+  
+    #shaderPanel {
+    display: none;
+  }
+
+  .content-with-shader {
+    width: 100%;
+    padding-right: 0;
   }
 }
