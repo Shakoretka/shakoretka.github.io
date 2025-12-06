@@ -191,29 +191,24 @@ body {
 
 .modal {
   background: #161b22;
-  padding: 28px 32px;
-  border-radius: var(--modal-border-radius);
   max-width: 600px;
   width: 90%;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-base);
-  box-shadow: var(--box-shadow-glow);
   position: relative;
-  border: 1px solid var(--accent-color);
-  user-select: text;
 }
 
 .close-btn {
   position: absolute;
-  top: 16px;
-  right: 20px;
+  top: -50px;
+  right: 0;
   cursor: pointer;
   font-size: 28px;
   color: var(--accent-color);
   background: transparent;
   border: none;
   transition: color var(--transition-speed) ease;
+  z-index: 9000;
 }
 
 .close-btn:hover {
@@ -225,34 +220,30 @@ body {
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-radius: var(--carousel-border-radius);
   line-height: 0;
   align-items: flex-start;
 }
 
 .carousel img {
   width: 100%;
-  border-radius: var(--carousel-border-radius);
   object-fit: cover;
   transition: transform var(--transition-speed) ease;
 }
 
 .carousel video {
   width: 100%;
-  height: 100%;
   object-fit: contain; /* или cover — по вкусу */
-  border-radius: var(--carousel-border-radius);
 }
 
 .arrow {
   position: absolute;
   top: 0;
   height: 100%;
-  width: 10%; /* Половина ширины контейнера */
+  width: 6%; /* Половина ширины контейнера */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  font-size: 30px;
   color: var(--accent-color);
   cursor: pointer;
   user-select: none;
@@ -262,7 +253,6 @@ body {
   pointer-events: auto;
   z-index: 10;
   padding: 0 10px;
-  border-radius: var(--carousel-border-radius);
 }
 
 /* Левая стрелка занимает левую половину */
@@ -307,20 +297,25 @@ body {
 /* Заголовок и описание */
 .modal-title {
   font-family: "Jura";
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 800;
   color: var(--text-color);
-  letter-spacing: 0.04em;
+  letter-spacing: 5px;
   user-select: text;
+  margin: 16px;
 }
 
 .modal-desc {
-  color: var(--modal-text-color);
+  color: var(--bg-color);
+  background-color: var(--accent-color);
+  font-family: "Rubik";
   line-height: 1.5;
   user-select: text;
   font-size: 16px;
   font-weight: 500;
   white-space: pre-wrap;
+  margin: 0px;
+  padding: 16px;
 }
 
 #shaderPanel {
@@ -423,6 +418,13 @@ body {
     font-family: "Jura";  
     src: url("./fonts/Jura-Regular.ttf") format("truetype");  
     font-weight: 400;  
+    font-style: normal;
+    font-display: swap;
+}  
+
+@font-face {  
+    font-family: "Rubik";  
+    src: url("./fonts/Rubik-Light.ttf") format("truetype");
     font-style: normal;
     font-display: swap;
 }  
