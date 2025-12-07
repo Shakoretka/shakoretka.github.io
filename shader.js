@@ -4,7 +4,7 @@
   const editor = document.getElementById('shaderEditor');
   const shaderDivider = document.getElementById('shaderDivider');
 
-  // ---- ЗАГРУЗКА GLSL ФАЙЛОВ ----
+  // ---- GLSL ----
   const vertexSrc = await fetch('shader.vert.glsl').then(r => r.text());
   let fragmentSrc = await fetch('shader.frag.glsl').then(r => r.text());
   editor.value = fragmentSrc.trim();
@@ -29,7 +29,7 @@
     shaderDivider.textContent = '-'.repeat(Math.floor(widthPx / charWidth));
   }
 
-  // ---- WEBGL ----
+  // ---- WEBGL 2----
   let gl = canvas.getContext('webgl2');
   if(!gl){
     errorBox.textContent = 'WebGL2 не поддерживается.';
@@ -125,7 +125,6 @@
 
   requestAnimationFrame(render);
 
-  // Live-обновление кода (debounce)
   let timer;
   editor.addEventListener('input', () => {
     clearTimeout(timer);

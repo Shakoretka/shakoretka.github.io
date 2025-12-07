@@ -1,32 +1,27 @@
 :root {
-  /* Цвета */
-  --bg-color: #1e1e20;          /* Очень тёмный фон */
-  --text-color: #d8caa1;        /* Светло-серый текст */
-  --accent-color: #d9372c;      /* Холодный синий неон */
-  --accent-hover: #374140;      /* Немного насыщенней для ховера */
-  --modal-bg-color: #292c2ba6;  /* Тёмный с прозрачностью */
-  --modal-text-color: #d8caa1;  /* Средний серый для описаний */
+  --bg-color: #1e1e20;
+  --text-color: #d8caa1;
+  --accent-color: #d9372c;
+  --accent-hover: #374140;
+  --modal-bg-color: #292c2ba6;
+  --modal-text-color: #d8caa1;
   --background-color: #111;
   --card-color: #1e1e20;
 
-  /* Радиусы */
   --tag-border-radius: 6px;
   --modal-border-radius: 6px;
   --item-border-radius: 6px;
   --carousel-border-radius: 6px;
 
-  /* Отступы и размеры */
   --padding-base: 16px;
   --padding-small: 16px;
   --gap-base: 16px;
 
-  /* Переходы и тени */
   --transition-speed: 0.3s;
   --box-shadow-accent: 0 0 0 0 var(--card-color);
   --box-shadow-glow: 0 0 40px 8px var(--accent-color);
 }
 
-/* Общие настройки */
 body {
   background: var(--background-color);
   color: var(--text-color);
@@ -35,7 +30,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Теги */
 .tags-wrapper {
   display: flex;
   flex-direction: column;
@@ -138,7 +132,6 @@ body {
     transform 0.2s ease;
 }
 
-/* Сетка */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -149,7 +142,7 @@ body {
 .item {
   display: flex;
   flex-direction: column;
-  background: var(--card-color); /* Немного светлее фона */
+  background: var(--card-color);
   padding: var(--padding-small);
   cursor: pointer;
   transition: box-shadow var(--transition-speed) ease, transform 0.25s ease;
@@ -177,7 +170,6 @@ body {
   padding: 16px;
 }
 
-/* Модалка */
 .modal-bg {
   position: fixed;
   inset: 0;
@@ -215,7 +207,6 @@ body {
   color: var(--accent-hover);
 }
 
-/* Карусель */
 .carousel {
   position: relative;
   width: 100%;
@@ -232,14 +223,14 @@ body {
 
 .carousel video {
   width: 100%;
-  object-fit: contain; /* или cover — по вкусу */
+  object-fit: contain;
 }
 
 .arrow {
   position: absolute;
   top: 0;
   height: 100%;
-  width: 6%; /* Половина ширины контейнера */
+  width: 6%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -247,27 +238,24 @@ body {
   color: var(--accent-color);
   cursor: pointer;
   user-select: none;
-  opacity: 0.2; /* слегка видимы по умолчанию */
+  opacity: 0.2;
   transition: opacity 0.3s ease, background-color 0.3s ease;
-  background-color: rgba(0, 0, 0, 0); /* изначально прозрачный фон */
+  background-color: rgba(0, 0, 0, 0);
   pointer-events: auto;
   z-index: 10;
   padding: 0 10px;
 }
 
-/* Левая стрелка занимает левую половину */
 .arrow.left {
   left: 0;
   justify-content: flex-start;
 }
 
-/* Правая стрелка занимает правую половину */
 .arrow.right {
   right: 0;
   justify-content: flex-end;
 }
 
-/* При наведении курсора на левую половину (.arrow.left) — стрелка становится полностью видимой */
 .carousel:hover .arrow.left:hover,
 .carousel:hover:hover > .arrow.left:hover {
   opacity: 1;
@@ -275,7 +263,6 @@ body {
   color: var(--accent-hover);
 }
 
-/* При наведении курсора на правую половину (.arrow.right) — стрелка становится полностью видимой */
 .carousel:hover .arrow.right:hover,
 .carousel:hover:hover > .arrow.right:hover {
   opacity: 1;
@@ -283,7 +270,6 @@ body {
   color: var(--accent-hover);
 }
 
-/* Чтобы только та стрелка, на которую наведён курсор, была видимой */
 .carousel:hover .arrow.left:not(:hover) {
   opacity: 0.2;
   background-color: rgba(0, 0, 0, 0);
@@ -371,7 +357,7 @@ body {
 }
 
 .content-with-shader {
-  width: calc(100% - 300px - 16px); /* ширина панели + небольшой отступ */
+  width: calc(100% - 300px - 16px);
   max-width: 100%;
   box-sizing: border-box;
 }
