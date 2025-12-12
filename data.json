@@ -1,5 +1,12 @@
 [
   {
+    "Name": "Paralax Sword",
+    "Preview": "SwordPreview.mp4",
+    "Images": ["Sword1.mp4", "Sword2.mp4"],
+    "Tags": ["vfx","shaders"],
+    "Description": "Паралакс эффект на клинке, демонстрирующий глубину и динамику космоса. Благодаря ScreenSpace координатам, создается эффект окна в другое измерение. Подробная статья о реализации эффекта доступна по ссылке \nhttps://dtf.ru/gamedev/4110492-prostranstva-v-kompyuternoy-grafike"
+  },
+  {
     "Name": "Hex SiFi Shield",
     "Preview": "HexShieldPreview.mp4",
     "Images": ["HexShield1.mp4"],
@@ -45,7 +52,7 @@
     "Name": "Статья \"Координатные пространства\"",
     "Preview": "CSPreview.mp4",
     "Images": ["CS1.png"],
-    "Tags": ["articles", "shaders", "materials"],
+    "Tags": ["articles", "shaders"],
     "Description": "https://dtf.ru/gamedev/4110492-prostranstva-v-kompyuternoy-grafike\n\nСтатья объясняет базовую концепцию координатных пространств в 3D-графике. Рассматриваются основные пространства: World, Object/Local, Camera/View и Tangent, их различия и сферы применения. Отдельно описывается роль Transform и матриц преобразований. Также приводятся примеры использования этих знаний в шейдерах."
   },
   {
