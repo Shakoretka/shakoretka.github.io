@@ -32,7 +32,7 @@
     "Preview": "FireworksPreview.mp4",
     "Images": ["Fireworks1.mp4", "Fireworks2.png"],
     "Tags": ["vfx"],
-    "Description": "«Фейерверк с фокусом на реализм и бюджет VR-устройств. Задача решена за счёт использования мощностей GPU и скрупулёзного профилирования партикловой системы.\n\nДвижок: Unity\nИнструменты: Shader Graph, VFX Graph, Photoshop"
+    "Description": "Фейерверк с фокусом на реализм и бюджет VR-устройств. Задача решена за счёт использования мощностей GPU и скрупулёзного профилирования партикловой системы.\n\nДвижок: Unity\nИнструменты: Shader Graph, VFX Graph, Photoshop"
   },
   {
     "Name": "Fire Ring",
