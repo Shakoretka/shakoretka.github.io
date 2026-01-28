@@ -46,7 +46,7 @@
     "Preview": "GOLPreview.mp4",
     "Images": ["GOL1.mp4", "GOL2.png"],
     "Tags": ["games", "procedural", "shaders"],
-    "Description": "Клеточный автомат \"Игра жизни\" (Game of Life). Реализован на основе compute shaders, что позволяет параллельно обрабатывать состояние каждой ячейки на огромных площадях. Начальное расположение клеток регулируется сидом с использованием процедурных шумов.\n\nПопробовать можно, скачав проект по ссылке https://drive.google.com/file/d/1QNvuFNfBiSn25daHtB4b8bfkUZNc2gWj/view?usp=sharing\n\nДвижок:Unity\n\nИнструменты: Compute Shaders"
+    "Description": "Клеточный автомат \"Игра жизни\" (Game of Life). Реализован на основе compute shaders, что позволяет параллельно обрабатывать состояние каждой ячейки на огромных площадях. Начальное расположение клеток регулируется сидом с использованием процедурных шумов.\n\nПопробовать можно, скачав проект по ссылке https://drive.google.com/file/d/1QNvuFNfBiSn25daHtB4b8bfkUZNc2gWj/view?usp=sharing\n\nДвижок: Unity\n\nИнструменты: Compute Shaders"
   },
   {
     "Name": "Статья \"Координатные пространства\"",
