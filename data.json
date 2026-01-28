@@ -4,7 +4,7 @@
     "Preview": "SwordPreview.mp4",
     "Images": ["Sword1.mp4", "Sword2.mp4"],
     "Tags": ["vfx","shaders"],
-    "Description": "Паралакс эффект на клинке, демонстрирующий глубину и динамику космоса. Благодаря ScreenSpace координатам, создается эффект окна в другое измерение. Подробная статья о реализации эффекта доступна по ссылке \nhttps://dtf.ru/gamedev/4110492-prostranstva-v-kompyuternoy-grafike"
+    "Description": "Паралакс эффект на клинке, демонстрирующий глубину и динамику космоса. Благодаря ScreenSpace координатам, создается эффект окна в другое измерение. Подробная статья о реализации эффекта доступна по ссылке \nhttps://dtf.ru/gamedev/4110492-prostranstva-v-kompyuternoy-grafike \n\nДвижок:UE5\nИнструменты:MaterialGraph, Blender, Photoshop, PixPlant, GPT"
   },
   {
     "Name": "Hex SiFi Shield",
