@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productElement.innerHTML = `
                     <div class="product-video">
                         <video autoplay loop muted playsinline>
-                            <source src="${product.videoSrc}" type="video/webp">
+                            <source src="${product.videoSrc}" type="video/mp4">
                             Ваш браузер не поддерживает видео.
                         </video>
                     </div>
