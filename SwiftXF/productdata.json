@@ -1,12 +1,13 @@
 [
   {
-    "title": "Swift FX Volumetric Fog",
-    "description": "High‑performance volumetric fog solution for Unity URP and HDRP.",
-    "video": "https://www.youtube.com/embed/VIDEO_ID",
+    "id": "easing-graph",
+    "title": "Easing Graph",
+    "description": "Мощный инструмент для визуализации и настройки кривых интерполяции (easing) непосредственно в вашем проекте. Обеспечивает точный контроль над анимациями с минимальными затратами производительности.",
+    "videoSrc": "https://www.w3schools.com/html/mov_bbb.mp4", 
     "links": {
-      "unity": "https://assetstore.unity.com/",
-      "github": "https://github.com/",
-      "boosty": "https://boosty.to/"
+      "github": "https://github.com/Shakoretka/Easing-Graph",
+      "unity": "#",
+      "boosty": "#"
     }
   }
 ]

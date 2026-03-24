@@ -1,27 +1,59 @@
-fetch('productdata.json')
-  .then(res => res.json())
-  .then(products => {
-    const container = document.getElementById('product-container');
+document.addEventListener('DOMContentLoaded', () => {
+    const productsContainer = document.getElementById('products-container');
 
-    products.forEach(product => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
+    // Функция для создания ссылок
+    const createLinksHTML = (links) => {
+        let html = '';
+        if (links.github && links.github !== '#') {
+            html += `<a href="${links.github}" target="_blank" class="btn">GitHub</a>`;
+        }
+        if (links.unity && links.unity !== '#') {
+            html += `<a href="${links.unity}" target="_blank" class="btn">Unity Asset Store</a>`;
+        }
+        if (links.boosty && links.boosty !== '#') {
+            html += `<a href="${links.boosty}" target="_blank" class="btn">Boosty</a>`;
+        }
+        return html;
+    };
 
-      card.innerHTML = `
-        <div class="product-video">
-          <iframe src="${product.video}" allowfullscreen></iframe>
-        </div>
-        <div class="product-info">
-          <h3>${product.title}</h3>
-          <p>${product.description}</p>
-          <div class="product-links">
-            ${product.links.unity ? `<a href="${product.links.unity}" target="_blank">Unity</a>` : ''}
-            ${product.links.github ? `<a href="${product.links.github}" target="_blank">GitHub</a>` : ''}
-            ${product.links.boosty ? `<a href="${product.links.boosty}" target="_blank">Boosty</a>` : ''}
-          </div>
-        </div>
-      `;
+    // Загрузка данных из JSON
+    fetch('productdata.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка сети при загрузке продуктов');
+            }
+            return response.json();
+        })
+        .then(products => {
+            if (products.length === 0) {
+                productsContainer.innerHTML = '<p style="color: var(--text-secondary); font-family: var(--font-mono);">// Продукты находятся в разработке...</p>';
+                return;
+            }
 
-      container.appendChild(card);
-    });
-  });
+            products.forEach(product => {
+                const productElement = document.createElement('article');
+                productElement.className = 'product-card';
+                
+                productElement.innerHTML = `
+                    <div class="product-video">
+                        <video autoplay loop muted playsinline>
+                            <source src="${product.videoSrc}" type="video/mp4">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-desc">${product.description}</p>
+                        <div class="product-links">
+                            ${createLinksHTML(product.links)}
+                        </div>
+                    </div>
+                `;
+                productsContainer.appendChild(productElement);
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            productsContainer.innerHTML = '<p style="color: red; font-family: var(--font-mono);">// Ошибка загрузки базы данных продуктов.</p>';
+        });
+});

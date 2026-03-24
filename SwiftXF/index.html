@@ -1,53 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Swift FX</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift FX | High-Performance Tools</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="header">
-    <div class="logo-block">
-      <img src="images/logo.png" alt="Swift FX logo" class="logo" />
-      <h1>Swift FX</h1>
+    <div class="container">
+        <header class="header">
+            <img src="images/logo.jpg" alt="Swift FX Logo" class="logo">
+            <h1 class="brand-name">Swift FX</h1>
+        </header>
+
+        <section class="info-grid">
+            <div class="info-block about">
+                <h2>// О компании</h2>
+                <p>Мы создаем высокопроизводительные инструменты и утилиты для разработчиков. Наша философия — это строгий минимализм, оптимизация рабочих процессов и элегантные решения для сложных технических задач в геймдеве и софтверной инженерии.</p>
+            </div>
+            
+            <div class="info-block contacts">
+                <h2>// Контакты</h2>
+                <ul class="contact-list">
+                    <li><span class="label">Email:</span> <a href="mailto:contact@swiftfx.dev">contact@swiftfx.dev</a></li>
+                    <li><span class="label">GitHub:</span> <a href="https://github.com/Shakoretka" target="_blank">github.com/Shakoretka</a></li>
+                    <li><span class="label">Discord:</span> <a href="#">@swiftfx</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <h2 class="section-title">Выпущенные продукты_</h2>
+            <div id="products-container">
+                </div>
+        </section>
     </div>
-  </header>
 
-  <main>
-    <section class="about-contact">
-      <div class="about">
-        <h2>About</h2>
-        <p>
-          Swift FX develops high‑quality tools and visual effects solutions
-          for real‑time graphics and game development.
-        </p>
-        <p>
-          Our goal is to create performant, flexible and production‑ready
-          software for developers and artists.
-        </p>
-      </div>
-
-      <div class="contact">
-        <h2>Contact</h2>
-        <ul>
-          <li>Email: <a href="mailto:contact@swiftfx.dev">contact@swiftfx.dev</a></li>
-          <li>GitHub: <a href="#">github.com/swiftfx</a></li>
-          <li>Boosty: <a href="#">boosty.to/swiftfx</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="products">
-      <h2>Products</h2>
-      <div id="product-container" class="product-container"></div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>© Swift FX</p>
-  </footer>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

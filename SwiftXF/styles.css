@@ -1,91 +1,191 @@
+/* --- ПЕРЕМЕННЫЕ --- */
 :root {
+    --bg-color: #050505;          /* Почти идеальный черный */
+    --surface-color: #111111;     /* Цвет блоков */
+    --text-primary: #f0f0f0;      /* Светлый текст */
+    --text-secondary: #888888;    /* Приглушенный текст */
+    --accent-color: #9c1523;      /* Красный цвет с вашего логотипа */
+    --accent-hover: #c41b2d;
+    --border-color: #222222;
+    
+    --font-main: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
 }
 
+/* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* --- ШАПКА --- */
 .header {
-  padding: 2rem 4rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.logo-block {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 80px;
+    margin-top: 40px;
 }
 
 .logo {
-  width: 56px;
-  height: 56px;
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 20px rgba(156, 21, 35, 0.2));
 }
 
-.about-contact {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: 3rem 4rem;
+.brand-name {
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
 }
 
-.about,
-.contact {
-  background: var(--bg-secondary);
-  padding: 2rem;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
+/* --- ИНФО И КОНТАКТЫ --- */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 100px;
 }
 
-.products {
-  padding: 3rem 4rem;
+.info-block {
+    background: var(--surface-color);
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
-.product-container {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  margin-top: 2rem;
+.info-block h2 {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.contact-list {
+    list-style: none;
+}
+
+.contact-list li {
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+}
+
+.contact-list .label {
+    color: var(--text-secondary);
+    display: inline-block;
+    width: 80px;
+}
+
+/* --- ПРОДУКТЫ --- */
+.section-title {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
 }
 
 .product-card {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 2rem;
-  background: var(--bg-secondary);
-  padding: 1.5rem;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
+    display: flex;
+    gap: 40px;
+    margin-bottom: 60px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.product-video iframe {
-  width: 100%;
-  height: 100%;
-  min-height: 260px;
-  border: none;
-  border-radius: 8px;
+.product-video {
+    flex: 1;
+    min-width: 0;
+    background: #000;
 }
 
-.product-info h3 {
-  margin-bottom: 0.5rem;
+.product-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-.product-links a {
-  display: inline-block;
-  margin-right: 1rem;
-  margin-top: 1rem;
-  color: var(--accent);
-  text-decoration: none;
+.product-info {
+    flex: 1;
+    padding: 40px 40px 40px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.footer {
-  text-align: center;
-  padding: 2rem;
-  color: var(--text-secondary);
-  border-top: 1px solid var(--border-color);
+.product-title {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
-@media (max-width: 900px) {
-  .about-contact {
-    grid-template-columns: 1fr;
-  }
+.product-desc {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+}
 
-  .product-card {
-    grid-template-columns: 1fr;
-  }
+.product-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid var(--accent-color);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+/* --- АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ --- */
+@media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    .product-card {
+        flex-direction: column;
+    }
+    .product-info {
+        padding: 30px;
+    }
 }
