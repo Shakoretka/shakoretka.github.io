@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('productdata.json')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Ошибка сети при загрузке продуктов');
+                throw new Error('Network error while loading products');
             }
             return response.json();
         })
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="product-video">
                         <video autoplay loop muted playsinline>
                             <source src="${product.videoSrc}" type="video/mp4">
-                            Ваш браузер не поддерживает видео.
+                            Video playback is not supported by your browser.
                         </video>
                     </div>
                     <div class="product-info">
