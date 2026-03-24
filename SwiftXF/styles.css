@@ -88,6 +88,13 @@ a:hover {
     margin-bottom: 20px;
 }
 
+.info-block primary{
+    color: var(--text-primary);
+}
+
+.info-block secondary{
+    color: var(--text-secondary);
+}
 .contact-list {
     list-style: none;
 }
