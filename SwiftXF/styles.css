@@ -166,6 +166,8 @@ a:hover {
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
 }
 
 .btn {
@@ -177,22 +179,24 @@ a:hover {
     font-size: 0.9rem;
     border-radius: 4px;
     transition: all 0.2s ease;
+    text-decoration: none;
 }
 
 .btn.documentation {
-    margin-left: auto;
-    display: inline-block;
-    border: 1px solid var(--accent-color);
-    color: var(--text-primary);
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    margin-left: auto; 
+    border-color: var(--text-secondary);
+    color: var(--text-secondary);
 }
 
 .btn:hover {
     background: var(--accent-color);
-    color: #fff;
+    color: var(--text-primary);
+}
+
+.btn.documentation:hover {
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+    background: transparent;
 }
 
 /* --- АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ --- */
@@ -205,5 +209,10 @@ a:hover {
     }
     .product-info {
         padding: 30px;
+    }
+    .btn.documentation {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
     }
 }

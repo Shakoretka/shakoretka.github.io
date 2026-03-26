@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (links.boosty && links.boosty !== '#') {
             html += `<a href="${links.boosty}" target="_blank" class="btn">Boosty</a>`;
         }
+        // Проверяем наличие документации
         if (links.documentation && links.documentation !== '#') {
-            html += `<a href="${links.documentation}" target="_blank" class=".btn.documentation">Documentation</a>`;
+            html += `<a href="${links.documentation}" target="_blank" class="btn documentation">Documentation</a>`;
         }
         return html;
     };
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(products => {
             if (products.length === 0) {
-                productsContainer.innerHTML = '<p style="color: var(--text-secondary); font-family: var(--font-mono);">// Продукты находятся в разработке...</p>';
+                productsContainer.innerHTML = '<p style="color: var(--text-secondary); font-family: var(--font-mono);">// Products in development...</p>';
                 return;
             }
 
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         })
         .catch(error => {
-            console.error('Ошибка:', error);
-            productsContainer.innerHTML = '<p style="color: red; font-family: var(--font-mono);">// Ошибка загрузки базы данных продуктов.</p>';
+            console.error('Error:', error);
+            productsContainer.innerHTML = '<p style="color: red; font-family: var(--font-mono);">// Failed to load product database.</p>';
         });
 });
