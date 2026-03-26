@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (links.boosty && links.boosty !== '#') {
             html += `<a href="${links.boosty}" target="_blank" class="btn">Boosty</a>`;
         }
+        if (links.documentation && links.documentation !== '#') {
+            html += `<a href="${links.documentation}" target="_blank" class="btn documentation">Documentation</a>`;
+        }
         return html;
     };
 

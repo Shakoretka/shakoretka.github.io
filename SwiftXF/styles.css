@@ -179,6 +179,17 @@ a:hover {
     transition: all 0.2s ease;
 }
 
+.btn documentation {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid var(--accent-color);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
 .btn:hover {
     background: var(--accent-color);
     color: #fff;
