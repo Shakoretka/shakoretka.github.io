@@ -8,10 +8,10 @@
   },
   {
     "Name": "Technical Art @ Dreadmoor (FPS)",
-    "Preview": "DreadmoorPreview.png", 
+    "Preview": "DreadmoorPreview.jpg", 
     "Images": ["Dreadmoor1.mp4"],
     "Tags": ["shaders", "procedural", "tools", "vfx"],
-    "Description": "Architected a unified environment material system for an unannounced FPS (Dreadmoor). Implemented a master-material workflow supporting layered setups, vertex blending, and advanced vegetation shading.\n\nImplemented advanced environmental VFX: stylized water shaders with artistic foam control, volumetric fog using 6-way lighting techniques, and cloud shadow systems.\n\nEngine: UE5\nTools: Material Editor, SpeedTree, World Partition, HLSL"
+    "Description": "Architected a unified environment material system for an unannounced FPS (Dreadmoor). Implemented a master-material workflow supporting layered setups, vertex blending, and advanced vegetation shading.\n\nImplemented advanced environmental VFX: stylized water shaders with artistic foam control, volumetric fog using 6-way lighting techniques, and cloud shadow systems.\n\nEngine: UE5\nTools: Material Editor, SpeedTree, Houdini, WPA"
   },
   {
     "Name": "Parallax & Space Shaders",
