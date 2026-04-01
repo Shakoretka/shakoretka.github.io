@@ -2,22 +2,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const productsContainer = document.getElementById('products-container');
 
     // Функция для создания ссылок
-    const createLinksHTML = (links) => {
-        let html = '';
-        if (links.github && links.github !== '#') {
-            html += `<a href="${links.github}" target="_blank" class="btn">GitHub</a>`;
-        }
-        if (links.unity && links.unity !== '#') {
-            html += `<a href="${links.unity}" target="_blank" class="btn">Unity Asset Store</a>`;
-        }
-        if (links.boosty && links.boosty !== '#') {
-            html += `<a href="${links.boosty}" target="_blank" class="btn">Boosty</a>`;
-        }
-        // Проверяем наличие документации
-        if (links.documentation && links.documentation !== '#') {
-            html += `<a href="${links.documentation}" target="_blank" class="btn documentation">Documentation</a>`;
-        }
-        return html;
+        const createLinksHTML = (links) => {
+            let html = '';
+            
+            const generateBtn = (linkData, type) => {
+                if (!linkData) return '';
+                
+                const label = linkData.label;
+                if (linkData.available) {
+                    return `<a href="${linkData.url}" target="_blank" class="btn">${label}</a>`;
+                } else {
+                    // Определяем текст для наведения в зависимости от типа кнопки
+                    const hoverText = type === 'github' ? 'Private' : 'Pending';
+                    
+                    // Добавляем data-hover и класс disabled
+                    return `<span class="btn disabled" data-hover="${hoverText}">${label}</span>`;
+                }
+            };
+
+            html += generateBtn(links.github, 'github');
+            html += generateBtn(links.unity, 'unity');
+            html += generateBtn(links.boosty, 'boosty');
+            
+            // Для документации оставляем логику с отступом вправо
+            if (links.documentation && links.documentation.available) {
+                html += `<a href="${links.documentation.url}" target="_blank" class="btn documentation">${links.documentation.label}</a>`;
+            }
+
+            return html;
+        };
     };
 
     // Загрузка данных из JSON

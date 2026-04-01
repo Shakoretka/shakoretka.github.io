@@ -236,6 +236,38 @@ a:hover {
     background: transparent;
 }
 
+.btn.disabled {
+    position: relative;
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-style: dashed;
+    color: var(--text-secondary);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn.disabled::after {
+    content: attr(data-hover);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    opacity: 0;
+    color: var(--accent-color);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn.disabled:hover {
+    color: transparent;
+    border-color: var(--accent-color);
+}
+
+.btn.disabled:hover::after {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
 /* --- АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ --- */
 @media (max-width: 768px) {
     .info-grid {
