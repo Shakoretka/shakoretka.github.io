@@ -2,7 +2,7 @@
   {
     "Name": "Easing Graph Tool",
     "Preview": "EGPreview.png",
-    "Images": ["EG1.gif", "EG2.gif", "EG3.gif", "EG4.gif", "EG5.gif", "EG6.gif", "EGPreview.png"],
+    "Images": ["EG1.mp4", "EG2.gif", "EG3.gif", "EG4.gif", "EG5.gif", "EG6.gif", "EGPreview.png"],
     "Tags": ["tools", "procedural"],
     "Description": "A professional-grade framework for Unity Graph editors. Developed to standardize and accelerate procedural animation workflows by providing a library of high-performance easing functions.\n\nKey features: seamless integration with Shader Graph/VFX Graph, optimized HLSL backend, and native-like UX.\n\nDocumentation: https://docs.google.com/document/d/1_Nran_VnYlj_umnT3s7W3gm2Vkj28QzgvBopOQMPHtA/\nWebsite: https://shakoretka.github.io/SwiftXF/\n\nEngine: Unity\nTools: Shader Graph, VFX Graph, HLSL, C#"
   },
