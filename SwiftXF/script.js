@@ -34,35 +34,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            products.forEach(product => {
-                const productElement = document.createElement('article');
-                productElement.className = 'product-card';
-                
-                // Определяем, видео это или картинка
-                const src = product.previewSrc;
-                const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
-                
-                // Формируем медиа-контент
-                const mediaHTML = isVideo 
-                    ? `<video autoplay loop muted playsinline>
-                            <source src="${src}" type="video/mp4">
-                            Video playback is not supported.
-                    </video>`
-                    : `<img src="${src}" alt="${product.title}" class="product-preview-img">`;
+        products.forEach(product => {
+            const productElement = document.createElement('article');
+            productElement.className = 'product-card';
+            
+            // Формируем комбинированный медиа-контент
+            // Видео по умолчанию не запускается (нет autoplay), чтобы не тратить трафик
+            const mediaHTML = `
+                <img src="${product.previewImg}" alt="${product.title}" class="product-preview-static">
+                <video loop muted playsinline class="product-preview-video" preload="metadata">
+                    <source src="${product.previewVideo}" type="video/mp4">
+                    Video playback is not supported.
+                </video>
+            `;
 
-                productElement.innerHTML = `
-                    <div class="product-video"> ${mediaHTML}
+            productElement.innerHTML = `
+                <div class="product-media-container">
+                    ${mediaHTML}
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">${product.title}</h3>
+                    <p class="product-desc">${product.description}</p>
+                    <div class="product-links">
+                        ${createLinksHTML(product.links)}
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${product.title}</h3>
-                        <p class="product-desc">${product.description}</p>
-                        <div class="product-links">
-                            ${createLinksHTML(product.links)}
-                        </div>
-                    </div>
-                `;
-                productsContainer.appendChild(productElement);
+                </div>
+            `;
+            productsContainer.appendChild(productElement);
+
+            // Добавляем JavaScript-контроль для запуска/остановки видео при наведении
+            const mediaContainer = productElement.querySelector('.product-media-container');
+            const video = productElement.querySelector('.product-preview-video');
+
+            mediaContainer.addEventListener('mouseenter', () => {
+                // Запускаем видео только когда курсор наведен
+                video.play().catch(error => console.log("Video play failed:", error));
             });
+
+            mediaContainer.addEventListener('mouseleave', () => {
+                // Останавливаем и сбрасываем видео, когда курсор ушел
+                video.pause();
+                video.currentTime = 0; 
+            });
+        });
         })
         .catch(error => {
             console.error('Error:', error);
