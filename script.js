@@ -3,9 +3,7 @@ let items = [];
 let currentItem = null;
 let currentImageIndex = 0;
 let isExpanded = false; 
-
-// Установи значение, равное количеству колонок в твоем CSS (например, 3)
-const INITIAL_COUNT = 3; 
+const INITIAL_COUNT = 3;
 
 const grid = document.getElementById('grid');
 const modalBg = document.getElementById('modal-bg');
@@ -15,16 +13,13 @@ const modalVideo = document.getElementById('modal-video');
 const modalImage = document.getElementById('modal-image');
 const showAllBtn = document.getElementById('show-all-btn');
 
-// Загрузка данных
 fetch("data.json")
     .then(res => res.json())
     .then(data => {
         items = data;
         renderGrid();
-    })
-    .catch(err => console.error('Ошибка загрузки JSON:', err));
+    });
 
-// Логика кнопки "Show All"
 if (showAllBtn) {
     showAllBtn.addEventListener('click', () => {
         isExpanded = true;
@@ -32,23 +27,16 @@ if (showAllBtn) {
     });
 }
 
-// Фильтрация по тегам
 document.querySelectorAll('.tag').forEach(tag => {
     tag.addEventListener('click', () => {
         const val = tag.dataset.value;
-        if (selectedTags.has(val)) {
-            selectedTags.delete(val);
-            tag.classList.remove('active');
-        } else {
-            selectedTags.add(val);
-            tag.classList.add('active');
-        }
-        isExpanded = false; // Сбрасываем раскрытие при новой фильтрации
+        selectedTags.has(val) ? selectedTags.delete(val) : selectedTags.add(val);
+        tag.classList.toggle('active');
+        isExpanded = false; 
         renderGrid();
     });
 });
 
-// Очистка фильтров
 document.getElementById('clear-btn').onclick = () => {
     selectedTags.clear();
     document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
@@ -57,12 +45,10 @@ document.getElementById('clear-btn').onclick = () => {
 };
 
 function renderGrid() {
-    // 1. Фильтруем массив по выбранным тегам
     const filtered = selectedTags.size === 0 
         ? items 
         : items.filter(it => it.Tags.some(t => selectedTags.has(t)));
 
-    // 2. Логика сокращения до одной строки
     const shouldShowButton = !isExpanded && filtered.length > INITIAL_COUNT;
     const itemsToRender = shouldShowButton ? filtered.slice(0, INITIAL_COUNT) : filtered;
 
@@ -70,46 +56,64 @@ function renderGrid() {
         showAllBtn.style.display = shouldShowButton ? 'inline-block' : 'none';
     }
 
-    // 3. Отрисовка карточек
-grid.innerHTML = itemsToRender.map((item) => {
-        const isVideo = item.Preview.endsWith('.mp4');
-        // Используем encodeURIComponent для name, чтобы кавычки в названиях статей не ломали HTML
+    grid.innerHTML = itemsToRender.map((item) => {
+        // Ищем ПЕРВОЕ видео в массиве Images для ховера
+        const hoverVideo = item.Images.find(file => file.endsWith('.mp4') || file.endsWith('.webm'));
+        const previewIsVideo = item.Preview.endsWith('.mp4');
+
         return `
             <div class="item" data-name="${encodeURIComponent(item.Name)}">
-                ${isVideo 
-                    ? `<video src="images/${item.Preview}" muted loop playsinline></video>` 
-                    : `<img src="images/${item.Preview}">`
-                }
+                <div class="media-container">
+                    ${previewIsVideo 
+                        ? `<video class="preview-media" src="images/${item.Preview}" muted loop playsinline></video>` 
+                        : `<img class="preview-media" src="images/${item.Preview}">`
+                    }
+                    
+                    ${(!previewIsVideo && hoverVideo) 
+                        ? `<video class="hover-video" src="images/${hoverVideo}" muted loop playsinline style="display:none;"></video>` 
+                        : ''
+                    }
+                </div>
                 <div class="item-title">${item.Name}</div>
             </div>
         `;
     }).join('');
 
-    // 4. События для карточек
     document.querySelectorAll('.item').forEach(el => {
-            // Декодируем имя обратно для поиска в массиве
-            const itemName = decodeURIComponent(el.dataset.name);
-            const itemData = items.find(it => it.Name === itemName);
-            
-            const video = el.querySelector('video');
-            if (video) {
-                el.onmouseenter = () => video.play();
-                el.onmouseleave = () => { 
-                    video.pause(); 
-                    video.currentTime = 0; 
-                };
-            }
+        const itemName = decodeURIComponent(el.dataset.name);
+        const itemData = items.find(it => it.Name === itemName);
+        
+        // Логика ховера
+        const mainVideo = el.querySelector('video.preview-media');
+        const hoverVideo = el.querySelector('video.hover-video');
+        const previewImg = el.querySelector('img.preview-media');
 
-            // Если данные найдены, вешаем клик
-            if (itemData) {
-                el.onclick = () => openModal(itemData);
-            } else {
-                console.warn(`Не удалось найти данные для: ${itemName}`);
+        el.onmouseenter = () => {
+            if (mainVideo) {
+                mainVideo.play();
+            } else if (hoverVideo && previewImg) {
+                previewImg.style.display = 'none';
+                hoverVideo.style.display = 'block';
+                hoverVideo.play();
             }
-        });
+        };
+
+        el.onmouseleave = () => {
+            if (mainVideo) {
+                mainVideo.pause();
+                mainVideo.currentTime = 0;
+            } else if (hoverVideo && previewImg) {
+                hoverVideo.pause();
+                hoverVideo.currentTime = 0;
+                hoverVideo.style.display = 'none';
+                previewImg.style.display = 'block';
+            }
+        };
+
+        el.onclick = () => openModal(itemData);
+    });
 }
 
-// Функции модального окна
 function openModal(item) {
     if (!item) return;
     currentItem = item;
@@ -133,7 +137,6 @@ function updateModal() {
     }
 
     modalTitle.innerText = currentItem.Name;
-    
     const linkedDesc = currentItem.Description.replace(
         /(https?:\/\/[^\s]+)/g, 
         '<a href="$1" target="_blank" style="color: var(--accent-color); text-decoration: none;">$1</a>'
@@ -157,6 +160,4 @@ window.prevImage = () => {
     updateModal();
 };
 
-modalBg.onclick = (e) => { 
-    if (e.target === modalBg) closeModal(); 
-};
+modalBg.onclick = (e) => { if (e.target === modalBg) closeModal(); };
