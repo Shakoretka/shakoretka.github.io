@@ -1,21 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const productsContainer = document.getElementById('products-container');
 
-    // Функция для создания ссылок
     const createLinksHTML = (links) => {
         let html = '';
-        
         const generateBtn = (linkData, type) => {
             if (!linkData) return '';
-            
             const label = linkData.label;
             if (linkData.available) {
                 return `<a href="${linkData.url}" target="_blank" class="btn">${label}</a>`;
             } else {
-                // Определяем текст для наведения в зависимости от типа кнопки
                 const hoverText = type === 'github' ? 'Private' : 'Pending';
-                
-                // Добавляем data-hover и класс disabled
                 return `<span class="btn disabled" data-hover="${hoverText}">${label}</span>`;
             }
         };
@@ -24,20 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
         html += generateBtn(links.unity, 'unity');
         html += generateBtn(links.boosty, 'boosty');
         
-        // Для документации оставляем логику с отступом вправо
         if (links.documentation && links.documentation.available) {
             html += `<a href="${links.documentation.url}" target="_blank" class="btn documentation">${links.documentation.label}</a>`;
         }
-
         return html;
     };
 
-    // Загрузка данных из JSON
     fetch('productdata.json')
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network error while loading products');
-            }
+            if (!response.ok) throw new Error('Network error');
             return response.json();
         })
         .then(products => {
@@ -46,49 +35,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-        products.forEach(product => {
-            const productElement = document.createElement('article');
-            productElement.className = 'product-card';
-            
-            // Формируем комбинированный медиа-контент
-            // Видео по умолчанию не запускается (нет autoplay), чтобы не тратить трафик
-            const mediaHTML = `
-                <img src="${product.previewImg}" alt="${product.title}" class="product-preview-static">
-                <video loop muted playsinline class="product-preview-video" preload="metadata">
-                    <source src="${product.previewVideo}" type="video/mp4">
-                    Video playback is not supported.
-                </video>
-            `;
-
-            productElement.innerHTML = `
-                <div class="product-media-container">
-                    ${mediaHTML}
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.title}</h3>
-                    <p class="product-desc">${product.description}</p>
-                    <div class="product-links">
-                        ${createLinksHTML(product.links)}
+            products.forEach(product => {
+                const productElement = document.createElement('article');
+                productElement.className = 'product-card';
+                
+                // ИСПОЛЬЗУЕМ КЛАСС .product-video, КОТОРЫЙ ОПИСАН В CSS
+                productElement.innerHTML = `
+                    <div class="product-video"> 
+                        <img src="${product.previewImg}" alt="${product.title}" class="product-preview-static">
+                        <video loop muted playsinline webkit-playsinline class="product-preview-video" preload="metadata">
+                            <source src="${product.previewVideo}" type="video/mp4">
+                        </video>
                     </div>
-                </div>
-            `;
-            productsContainer.appendChild(productElement);
+                    <div class="product-info">
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-desc">${product.description}</p>
+                        <div class="product-links">
+                            ${createLinksHTML(product.links)}
+                        </div>
+                    </div>
+                `;
+                productsContainer.appendChild(productElement);
 
-            // Добавляем JavaScript-контроль для запуска/остановки видео при наведении
-            const mediaContainer = productElement.querySelector('.product-media-container');
-            const video = productElement.querySelector('.product-preview-video');
+                // Поиск элементов внутри созданного productElement
+                const mediaContainer = productElement.querySelector('.product-video');
+                const video = productElement.querySelector('.product-preview-video');
 
-            mediaContainer.addEventListener('mouseenter', () => {
-                // Запускаем видео только когда курсор наведен
-                video.play().catch(error => console.log("Video play failed:", error));
+                mediaContainer.addEventListener('mouseenter', () => {
+                    video.play().catch(e => console.warn("Autoplay blocked or failed", e));
+                });
+
+                mediaContainer.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0; 
+                });
             });
-
-            mediaContainer.addEventListener('mouseleave', () => {
-                // Останавливаем и сбрасываем видео, когда курсор ушел
-                video.pause();
-                video.currentTime = 0; 
-            });
-        });
         })
         .catch(error => {
             console.error('Error:', error);
