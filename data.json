@@ -4,7 +4,7 @@
     "Preview": "EGPreview.png",
     "Images": ["EG1.gif", "EG2.gif", "EG3.gif", "EG4.gif", "EG5.gif", "EG6.gif", "EGPreview.png"],
     "Tags": ["vfx","tools"],
-    "Description": "A set of high-performance, reusable easing functions designed for Unity Graph editors to simplify procedural animation and VFX. The Easing Graph library is easy to integrate and follows standard Unity design, making the workflow intuitive and seamless.\n\nDocumentation:https://docs.google.com/document/d/1_Nran_VnYlj_umnT3s7W3gm2Vkj28QzgvBopOQMPHtA/edit?usp=sharing\n\nMIT Licence Version: https://shakoretka.github.io/SwiftXF/\n\nEngene: Unity\nИнструменты: Shder Graph, VFX Graph, HLSL"
+    "Description": "A set of high-performance, reusable easing functions designed for Unity Graph editors to simplify procedural animation and VFX. The Easing Graph library is easy to integrate and follows standard Unity design, making the workflow intuitive and seamless.\n\nDocumentation:https://docs.google.com/document/d/1_Nran_VnYlj_umnT3s7W3gm2Vkj28QzgvBopOQMPHtA/edit?usp=sharing\n\nWebsite: https://shakoretka.github.io/SwiftXF/\n\nEngene: Unity\nTools: Shder Graph, VFX Graph, HLSL"
   },
   {
     "Name": "Paralax Sword",
