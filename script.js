@@ -2,8 +2,10 @@ const selectedTags = new Set();
 let items = [];
 let currentItem = null;
 let currentImageIndex = 0;
-let isExpanded = false; // Состояние раскрытого списка
-const INITIAL_COUNT = 6; // Количество работ до нажатия "Show All"
+let isExpanded = false; 
+
+// Установи значение, равное количеству колонок в твоем CSS (например, 3)
+const INITIAL_COUNT = 3; 
 
 const grid = document.getElementById('grid');
 const modalBg = document.getElementById('modal-bg');
@@ -20,7 +22,7 @@ fetch("data.json")
         items = data;
         renderGrid();
     })
-    .catch(err => console.error('Error loading JSON:', err));
+    .catch(err => console.error('Ошибка загрузки JSON:', err));
 
 // Логика кнопки "Show All"
 if (showAllBtn) {
@@ -34,7 +36,6 @@ if (showAllBtn) {
 document.querySelectorAll('.tag').forEach(tag => {
     tag.addEventListener('click', () => {
         const val = tag.dataset.value;
-        
         if (selectedTags.has(val)) {
             selectedTags.delete(val);
             tag.classList.remove('active');
@@ -42,8 +43,7 @@ document.querySelectorAll('.tag').forEach(tag => {
             selectedTags.add(val);
             tag.classList.add('active');
         }
-        
-        isExpanded = false; // Сбрасываем раскрытие при смене фильтра
+        isExpanded = false; // Сбрасываем раскрытие при новой фильтрации
         renderGrid();
     });
 });
@@ -57,12 +57,12 @@ document.getElementById('clear-btn').onclick = () => {
 };
 
 function renderGrid() {
-    // 1. Фильтруем массив
+    // 1. Фильтруем массив по выбранным тегам
     const filtered = selectedTags.size === 0 
         ? items 
         : items.filter(it => it.Tags.some(t => selectedTags.has(t)));
 
-    // 2. Определяем, нужно ли показывать кнопку "Show All"
+    // 2. Логика сокращения до одной строки
     const shouldShowButton = !isExpanded && filtered.length > INITIAL_COUNT;
     const itemsToRender = shouldShowButton ? filtered.slice(0, INITIAL_COUNT) : filtered;
 
@@ -70,7 +70,7 @@ function renderGrid() {
         showAllBtn.style.display = shouldShowButton ? 'inline-block' : 'none';
     }
 
-    // 3. Генерируем HTML
+    // 3. Отрисовка карточек
     grid.innerHTML = itemsToRender.map((item) => {
         const isVideo = item.Preview.endsWith('.mp4');
         return `
@@ -84,7 +84,7 @@ function renderGrid() {
         `;
     }).join('');
 
-    // 4. Навешиваем события на новые элементы
+    // 4. События для карточек
     document.querySelectorAll('.item').forEach(el => {
         const itemName = el.dataset.name;
         const itemData = items.find(it => it.Name === itemName);
@@ -97,12 +97,11 @@ function renderGrid() {
                 video.currentTime = 0; 
             };
         }
-        
         el.onclick = () => openModal(itemData);
     });
 }
 
-// Работа с модальным окном
+// Функции модального окна
 function openModal(item) {
     if (!item) return;
     currentItem = item;
@@ -127,7 +126,6 @@ function updateModal() {
 
     modalTitle.innerText = currentItem.Name;
     
-    // Форматирование ссылок в описании
     const linkedDesc = currentItem.Description.replace(
         /(https?:\/\/[^\s]+)/g, 
         '<a href="$1" target="_blank" style="color: var(--accent-color); text-decoration: none;">$1</a>'
@@ -138,7 +136,7 @@ function updateModal() {
 window.closeModal = () => {
     modalBg.style.display = 'none';
     modalVideo.pause();
-    modalVideo.src = ""; // Очистка src для остановки загрузки
+    modalVideo.src = ""; 
 };
 
 window.nextImage = () => {
@@ -151,7 +149,6 @@ window.prevImage = () => {
     updateModal();
 };
 
-// Закрытие по клику на фон
 modalBg.onclick = (e) => { 
     if (e.target === modalBg) closeModal(); 
 };

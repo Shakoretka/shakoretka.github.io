@@ -43,7 +43,7 @@ body {
 .tag.active, .tag:hover { border-color: var(--accent-color); color: var(--text-primary); }
 
 /* GRID */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
 .item { 
     background: var(--surface-color); border: 1px solid var(--border-color); 
     border-radius: 8px; overflow: hidden; cursor: pointer; transition: 0.3s;
