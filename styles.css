@@ -70,7 +70,7 @@ body {
     display: inline-block; padding: 10px 20px; border: 1px solid var(--accent-color); 
     color: var(--text-primary); font-family: var(--font-mono); text-decoration: none; border-radius: 4px;
 }
-.btn:hover { background: var(--accent-color); }
+.btn:hover { background: var(--accent-color); transition: all 0.3s ease; }
 .btn.documentation { border-color: var(--text-secondary); color: var(--text-secondary); }
 
 /* CAROUSEL */
@@ -155,29 +155,41 @@ body {
 
 .company-logo {
     height: 30px;
-    filter: grayscale(1) invert(1);
+    filter: grayscale(1);
 }
 
 /* Reset Button Style */
-.reset-btn {
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border-color: var(--border-color);
-    color: var(--text-secondary);
+.reset-btn, 
+.clear-btn, 
+#show-all-btn {
+    background: transparent;
+    /* Делаем текст и рамку приглушенными (серыми) */
+    color: rgba(216, 202, 161, 0.4); 
+    border: 1px solid rgba(216, 202, 161, 0.2);
+    padding: 8px 16px;
+    font-family: "JetBrainsMono", monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: var(--tag-border-radius);
 }
 
-.reset-btn:hover {
+.reset-btn:hover, 
+.clear-btn:hover, 
+#show-all-btn:hover {
+    color: var(--accent-color); /* Твой фирменный красный */
     border-color: var(--accent-color);
-    background: transparent;
-    color: var(--accent-color);
+    background: rgba(217, 55, 44, 0.05); /* Едва заметный красный оттенок фона */
+    box-shadow: 0 0 15px rgba(217, 55, 44, 0.2); /* Мягкое свечение */
 }
 
 /* Контейнер для кнопки "Show All" */
 .show-more-container {
     display: flex;
     justify-content: center;
-    margin-top: 40px;
-    padding-bottom: 20px;
+    margin: 40px 0;
 }
 
 #show-all-btn {
@@ -207,10 +219,22 @@ body {
     opacity: 0.8;
 }
 
-.company-logo {
-    height: 35px;
+.company-logo,
+.company-logos img,
+.company-logos svg {
+    /* Вместо height: 35px используй диапазон */
+    height: auto;
+    max-height: 45px; /* Увеличь лимит для высоких логотипов */
+    min-height: 25px;
     width: auto;
-    filter: grayscale(1) invert(1); /* Для черных лого на черном фоне */
+    max-width: 120px; /* Ограничь ширину, чтобы длинные не вытесняли других */
+    
+    object-fit: contain; /* Гарантирует, что лого не растянется */
+}
+
+.logo-tall {
+    transform: scale(1.4); /* Увеличиваем визуальный вес только этого элемента */
+    transform-origin: center;
 }
 
 @media (max-width: 768px) {
