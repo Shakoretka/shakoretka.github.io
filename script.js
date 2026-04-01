@@ -71,10 +71,11 @@ function renderGrid() {
     }
 
     // 3. Отрисовка карточек
-    grid.innerHTML = itemsToRender.map((item) => {
+grid.innerHTML = itemsToRender.map((item) => {
         const isVideo = item.Preview.endsWith('.mp4');
+        // Используем encodeURIComponent для name, чтобы кавычки в названиях статей не ломали HTML
         return `
-            <div class="item" data-name="${item.Name}">
+            <div class="item" data-name="${encodeURIComponent(item.Name)}">
                 ${isVideo 
                     ? `<video src="images/${item.Preview}" muted loop playsinline></video>` 
                     : `<img src="images/${item.Preview}">`
@@ -86,19 +87,26 @@ function renderGrid() {
 
     // 4. События для карточек
     document.querySelectorAll('.item').forEach(el => {
-        const itemName = el.dataset.name;
-        const itemData = items.find(it => it.Name === itemName);
-        const video = el.querySelector('video');
-        
-        if (video) {
-            el.onmouseenter = () => video.play();
-            el.onmouseleave = () => { 
-                video.pause(); 
-                video.currentTime = 0; 
-            };
-        }
-        el.onclick = () => openModal(itemData);
-    });
+            // Декодируем имя обратно для поиска в массиве
+            const itemName = decodeURIComponent(el.dataset.name);
+            const itemData = items.find(it => it.Name === itemName);
+            
+            const video = el.querySelector('video');
+            if (video) {
+                el.onmouseenter = () => video.play();
+                el.onmouseleave = () => { 
+                    video.pause(); 
+                    video.currentTime = 0; 
+                };
+            }
+
+            // Если данные найдены, вешаем клик
+            if (itemData) {
+                el.onclick = () => openModal(itemData);
+            } else {
+                console.warn(`Не удалось найти данные для: ${itemName}`);
+            }
+        });
 }
 
 // Функции модального окна
