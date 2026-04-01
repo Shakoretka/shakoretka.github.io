@@ -1,84 +1,68 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Portfolio[shakoretka]</title>
-  <link rel="stylesheet" href="styles.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Technical Artist</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="container">
+        <header class="header">
+            <div class="brand-name">PORTFOLIO_</div>
+        </header>
 
-  <div class="content-with-shader">
+        <section class="info-grid">
+            <div class="info-block">
+                <h2>// Profile</h2>
+                <p class="text-primary">Technical Artist & VFX Developer</p>
+                <p class="text-secondary">Специализируюсь на шейдерах, процедурных системах и оптимизации. Превращаю математические концепты в визуальный опыт.</p>
+            </div>
+            <div class="info-block">
+                <h2>// Career & Contacts</h2>
+                <div class="product-links">
+                    <a href="en_Savely_Elistratov_CV_Technical_Artist.docx.pdf" target="_blank" class="btn">Download CV</a>
+                    <a href="https://github.com/shakoretka" target="_blank" class="btn documentation">GitHub</a>
+                </div>
+            </div>
+        </section>
 
-    <!-- Теги -->
-    <section class="tags-wrapper">
-      <header class="tags-header">
-        <h2 class="tags-title">Tag's</h2>
-        <button id="clear-btn" class="clear-btn" title="Clear selected tags" aria-label="Clear selected tags">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M2.146 3.146a.5.5 0 0 1 .708 0L8 8.293l5.146-5.147a.5.5 0 0 1 
-            .708.708L8.707 9l5.147 5.146a.5.5 0 0 1-.708.708L8 9.707l-5.146 5.147a.5.5 
-            0 0 1-.708-.708L7.293 9 2.146 3.854a.5.5 0 0 1 0-.708z"/>
-          </svg>
-          Clear
-        </button>
-      </header>
+        <section class="tags-wrapper">
+            <div class="tags-header">
+                <h2 class="section-title">Projects_</h2>
+                <button id="clear-btn" class="clear-btn">Reset Filters</button>
+            </div>
+            <div class="tags" id="tags-container">
+                <button class="tag" data-value="vfx">vfx</button>
+                <button class="tag" data-value="tools">tools</button>
+                <button class="tag" data-value="shaders">shaders</button>
+                <button class="tag" data-value="procedural">procedural</button>
+                <button class="tag" data-value="articles">articles</button>
+            </div>
+        </section>
 
-      <div class="tags" role="list">
-        <button class="tag" data-value="vfx">vfx</button>
-        <button class="tag" data-value="tools">tools</button>
-        <button class="tag" data-value="materials">materials</button>
-        <button class="tag" data-value="shaders">shaders</button>
-        <button class="tag" data-value="procedural">procedural</button>
-        <button class="tag" data-value="games">games</button>
-        <button class="tag" data-value="articles">articles</button>
-        <button class="tag" data-value="other">other</button>
-      </div>
-    </section>
-
-    <!-- Сетка -->
-    <main>
-      <div id="grid" class="grid"></div>
-    </main>
-
-    <!-- Модальное окно -->
-    <div class="modal-bg" id="modal-bg">
-      <div class="modal">
-
-        <button class="close-btn" onclick="closeModal()">✕</button>
-
-        <div class="carousel">
-
-          <!-- Контейнер медиа -->
-          <div id="modal-media" class="modal-media-box">
-            <img id="modal-image" class="modal-media-el" style="display:none;" />
-            <video id="modal-video" class="modal-media-el" autoplay muted loop playsinline style="display:none;"></video>
-          </div>
-
-          <button class="arrow left" onclick="prevImage()">❮</button>
-          <button class="arrow right" onclick="nextImage()">❯</button>
-        </div>
-
-        <h3 id="modal-title" class="modal-title"></h3>
-        <p id="modal-desc" class="modal-desc"></p>
-
-      </div>
+        <main id="grid" class="grid"></main>
     </div>
 
-    <script src="script.js?v=2"></script>
+    <div class="modal-bg" id="modal-bg">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <div class="carousel">
+                <div id="modal-media" class="modal-media-box">
+                    <img id="modal-image" class="modal-media-el" style="display:none;">
+                    <video id="modal-video" class="modal-media-el" muted loop playsinline style="display:none;"></video>
+                </div>
+                <button class="arrow left" onclick="prevImage()">❮</button>
+                <button class="arrow right" onclick="nextImage()">❯</button>
+            </div>
+            <div class="modal-info">
+                <h3 id="modal-title" class="product-title"></h3>
+                <div id="modal-desc" class="product-desc"></div>
+            </div>
+        </div>
+    </div>
 
-  </div>
-
-
-  <!-- Шейдер -->
-  <aside id="shaderPanel">
-    <canvas id="glCanvas"></canvas>
-    <pre id="shaderDivider"></pre>
-    <textarea id="shaderEditor" spellcheck="false"></textarea>
-    <div id="shaderError"></div>
-  </aside>
-
-  <script src="shader.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
