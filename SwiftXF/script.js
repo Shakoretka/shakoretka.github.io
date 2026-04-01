@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="product-info">
                         <div class="product-header-row">
                             <h3 class="product-title">${product.title}</h3>
-                            <img src="images/unity-logo.png" alt="Unity" class="engine-logo" title="Developed for Unity">
+                            <img src="images/unity-logo.svg" alt="Unity" class="engine-logo" title="Developed for Unity">
                         </div>
                         <p class="product-desc">${product.description}</p>
                         <div class="product-links">
