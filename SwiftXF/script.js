@@ -38,12 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const productElement = document.createElement('article');
                 productElement.className = 'product-card';
                 
+                // Определяем, видео это или картинка
+                const src = product.previewSrc;
+                const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
+                
+                // Формируем медиа-контент
+                const mediaHTML = isVideo 
+                    ? `<video autoplay loop muted playsinline>
+                            <source src="${src}" type="video/mp4">
+                            Video playback is not supported.
+                    </video>`
+                    : `<img src="${src}" alt="${product.title}" class="product-preview-img">`;
+
                 productElement.innerHTML = `
-                    <div class="product-video">
-                        <video autoplay loop muted playsinline>
-                            <source src="${product.videoSrc}" type="video/mp4">
-                            Video playback is not supported by your browser.
-                        </video>
+                    <div class="product-video"> ${mediaHTML}
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">${product.title}</h3>

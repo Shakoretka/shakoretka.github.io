@@ -134,12 +134,17 @@ a:hover {
     flex: 1;
     min-width: 0;
     background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-.product-video video {
+.product-video video,
+.product-preview-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Это "магическое" свойство сохранит пропорции, обрезав лишнее */
     display: block;
 }
 
