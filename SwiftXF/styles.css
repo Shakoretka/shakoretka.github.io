@@ -155,16 +155,6 @@ a:hover,
     min-height: 250px; 
 }
 
-/* Принудительно ограничиваем любое видео внутри карточки */
-.product-card video {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-}
-
 .product-preview-static,
 .product-preview-video {
     width: 100%;
