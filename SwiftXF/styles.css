@@ -1,13 +1,12 @@
 /* --- ПЕРЕМЕННЫЕ --- */
 :root {
-    --bg-color: #050505;          /* Почти идеальный черный */
-    --surface-color: #111111;     /* Цвет блоков */
-    --text-primary: #f0f0f0;      /* Светлый текст */
-    --text-secondary: #888888;    /* Приглушенный текст */
-    --accent-color: #9c1523;      /* Красный цвет с вашего логотипа */
+    --bg-color: #050505;
+    --surface-color: #111111;
+    --text-primary: #f0f0f0;
+    --text-secondary: #888888;
+    --accent-color: #9c1523;
     --accent-hover: #c41b2d;
     --border-color: #222222;
-    
     --font-main: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 }
@@ -19,31 +18,23 @@
     box-sizing: border-box;
 }
 
+.text-primary {
+    color: var(--text-primary);
+    display: block; /* Чтобы основной текст был сверху */
+    margin-bottom: 10px;
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
     font-family: var(--font-main);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-}
-
-a {
-    color: var(--accent-color);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-a:hover {
-    color: var(--accent-hover);
-}
-
-.product-media-container {
-    flex: 1;
-    min-width: 0;
-    position: relative; /* Важно для абсолютного позиционирования внутри */
-    background: #000;
-    overflow: hidden;
-    cursor: pointer; /* Показываем, что блок интерактивен */
 }
 
 .container {
@@ -57,8 +48,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 80px;
-    margin-top: 40px;
+    margin: 40px 0 80px;
 }
 
 .logo {
@@ -92,18 +82,16 @@ a:hover {
 
 .info-block h2 {
     font-family: var(--font-mono);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: var(--text-secondary);
     margin-bottom: 20px;
+    margin-top: 20px; /* Отступ сверху для второго заголовка (Developer) */
 }
 
-.info-block primary{
-    color: var(--text-primary);
+.info-block h2:first-child {
+    margin-top: 0;
 }
 
-.info-block secondary{
-    color: var(--text-secondary);
-}
 .contact-list {
     list-style: none;
 }
@@ -114,10 +102,24 @@ a:hover {
     font-size: 0.95rem;
 }
 
+a, 
+.contact-list li a {
+    color: var(--accent-color) !important; /* !important только если другие стили перебивают */
+    text-decoration: none;
+    font-family: var(--font-mono);
+    transition: color 0.2s ease;
+}
+
 .contact-list .label {
     color: var(--text-secondary);
     display: inline-block;
     width: 80px;
+}
+
+a:hover, 
+.contact-list li a:hover {
+    color: var(--accent-hover) !important;
+    text-decoration: underline;
 }
 
 /* --- ПРОДУКТЫ --- */
@@ -139,14 +141,16 @@ a:hover {
     overflow: hidden;
 }
 
+/* Медиа-контейнер (видео и фото) */
 .product-video {
     flex: 1;
-    min-width: 0;
+    position: relative;
     background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    min-width: 0;
 }
 
 .product-preview-static,
@@ -155,30 +159,24 @@ a:hover {
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: opacity 0.3s ease; /* Плавный переход */
+    transition: opacity 0.3s ease;
 }
 
 .product-preview-static {
     position: relative;
-    z-index: 2; /* Картинка сверху */
-    opacity: 1;
+    z-index: 2;
 }
 
 .product-preview-video {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; /* Видео снизу */
-    opacity: 0; /* Изначально скрыто */
+    z-index: 1;
+    opacity: 0;
 }
 
-.product-card:hover .product-preview-static {
-    opacity: 0; /* Скрываем картинку */
-}
-
-.product-card:hover .product-preview-video {
-    opacity: 1; /* Показываем видео */
-}
+.product-card:hover .product-preview-static { opacity: 0; }
+.product-card:hover .product-preview-video { opacity: 1; }
 
 .product-info {
     flex: 1;
@@ -199,6 +197,7 @@ a:hover {
     margin-bottom: 30px;
 }
 
+/* --- КНОПКИ --- */
 .product-links {
     display: flex;
     gap: 15px;
@@ -215,8 +214,13 @@ a:hover {
     font-family: var(--font-mono);
     font-size: 0.9rem;
     border-radius: 4px;
-    transition: all 0.2s ease;
     text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--accent-color);
 }
 
 .btn.documentation {
@@ -225,17 +229,13 @@ a:hover {
     color: var(--text-secondary);
 }
 
-.btn:hover {
-    background: var(--accent-color);
-    color: var(--text-primary);
-}
-
 .btn.documentation:hover {
     border-color: var(--text-primary);
     color: var(--text-primary);
     background: transparent;
 }
 
+/* Неактивные кнопки (Private/Pending) */
 .btn.disabled {
     position: relative;
     opacity: 0.5;
@@ -243,7 +243,6 @@ a:hover {
     border-style: dashed;
     color: var(--text-secondary);
     overflow: hidden;
-    transition: all 0.3s ease;
 }
 
 .btn.disabled::after {
@@ -261,6 +260,7 @@ a:hover {
 .btn.disabled:hover {
     color: transparent;
     border-color: var(--accent-color);
+    background: transparent;
 }
 
 .btn.disabled:hover::after {
@@ -268,20 +268,10 @@ a:hover {
     transform: translate(-50%, -50%);
 }
 
-/* --- АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ --- */
+/* --- АДАПТИВНОСТЬ --- */
 @media (max-width: 768px) {
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-    .product-card {
-        flex-direction: column;
-    }
-    .product-info {
-        padding: 30px;
-    }
-    .btn.documentation {
-        margin-left: 0;
-        width: 100%;
-        text-align: center;
-    }
+    .info-grid { grid-template-columns: 1fr; }
+    .product-card { flex-direction: column; }
+    .product-info { padding: 30px; }
+    .btn.documentation { margin-left: 0; width: 100%; text-align: center; }
 }
