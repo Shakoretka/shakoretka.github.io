@@ -84,6 +84,136 @@ body {
 .arrow.right { right: 0; }
 .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; }
 
+.brand-subtitle {
+    font-family: var(--font-mono);
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin-top: 5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Стилизация контактов */
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-item {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+}
+
+.contact-item .label {
+    color: var(--text-secondary);
+    width: 80px;
+    display: inline-block;
+}
+
+.contact-item:hover {
+    color: var(--accent-color);
+}
+
+/* Стек технологий */
+.stack-grid {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.stack-icon {
+    height: 32px;
+    width: auto;
+    filter: grayscale(1) brightness(0.8);
+    transition: all 0.3s ease;
+}
+
+.stack-icon:hover {
+    filter: grayscale(0) brightness(1);
+    transform: translateY(-3px);
+}
+
+/* Логотипы компаний */
+.experience-section {
+    margin-top: 100px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.company-logos {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    margin-top: 20px;
+    opacity: 0.5;
+}
+
+.company-logo {
+    height: 30px;
+    filter: grayscale(1) invert(1);
+}
+
+/* Reset Button Style */
+.reset-btn {
+    font-size: 0.8rem;
+    padding: 5px 15px;
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+.reset-btn:hover {
+    border-color: var(--accent-color);
+    background: transparent;
+    color: var(--accent-color);
+}
+
+/* Контейнер для кнопки "Show All" */
+.show-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    padding-bottom: 20px;
+}
+
+#show-all-btn {
+    width: 200px;
+    text-align: center;
+}
+
+/* Секция коммерческого опыта */
+.experience-section {
+    margin-top: 60px;
+    padding: 60px 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.company-logos {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.company-logos:hover {
+    opacity: 0.8;
+}
+
+.company-logo {
+    height: 35px;
+    width: auto;
+    filter: grayscale(1) invert(1); /* Для черных лого на черном фоне */
+}
+
 @media (max-width: 768px) {
-    .info-grid { grid-template-columns: 1fr; }
+    .company-logos { gap: 30px; }
+    .company-logo { height: 25px; }
 }

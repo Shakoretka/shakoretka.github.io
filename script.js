@@ -2,6 +2,8 @@ const selectedTags = new Set();
 let items = [];
 let currentItem = null;
 let currentImageIndex = 0;
+let isExpanded = false; // Состояние раскрытого списка
+const INITIAL_COUNT = 6; // Количество работ до нажатия "Show All"
 
 const grid = document.getElementById('grid');
 const modalBg = document.getElementById('modal-bg');
@@ -9,40 +11,70 @@ const modalTitle = document.getElementById('modal-title');
 const modalDesc = document.getElementById('modal-desc');
 const modalVideo = document.getElementById('modal-video');
 const modalImage = document.getElementById('modal-image');
+const showAllBtn = document.getElementById('show-all-btn');
 
-// Загрузка
+// Загрузка данных
 fetch("data.json")
     .then(res => res.json())
     .then(data => {
         items = data;
         renderGrid();
-    });
+    })
+    .catch(err => console.error('Error loading JSON:', err));
 
-// Фильтрация
+// Логика кнопки "Show All"
+if (showAllBtn) {
+    showAllBtn.addEventListener('click', () => {
+        isExpanded = true;
+        renderGrid();
+    });
+}
+
+// Фильтрация по тегам
 document.querySelectorAll('.tag').forEach(tag => {
     tag.addEventListener('click', () => {
         const val = tag.dataset.value;
-        selectedTags.has(val) ? selectedTags.delete(val) : selectedTags.add(val);
-        tag.classList.toggle('active');
+        
+        if (selectedTags.has(val)) {
+            selectedTags.delete(val);
+            tag.classList.remove('active');
+        } else {
+            selectedTags.add(val);
+            tag.classList.add('active');
+        }
+        
+        isExpanded = false; // Сбрасываем раскрытие при смене фильтра
         renderGrid();
     });
 });
 
+// Очистка фильтров
 document.getElementById('clear-btn').onclick = () => {
     selectedTags.clear();
     document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+    isExpanded = false;
     renderGrid();
 };
 
 function renderGrid() {
+    // 1. Фильтруем массив
     const filtered = selectedTags.size === 0 
         ? items 
         : items.filter(it => it.Tags.some(t => selectedTags.has(t)));
 
-    grid.innerHTML = filtered.map((item, i) => {
+    // 2. Определяем, нужно ли показывать кнопку "Show All"
+    const shouldShowButton = !isExpanded && filtered.length > INITIAL_COUNT;
+    const itemsToRender = shouldShowButton ? filtered.slice(0, INITIAL_COUNT) : filtered;
+
+    if (showAllBtn) {
+        showAllBtn.style.display = shouldShowButton ? 'inline-block' : 'none';
+    }
+
+    // 3. Генерируем HTML
+    grid.innerHTML = itemsToRender.map((item) => {
         const isVideo = item.Preview.endsWith('.mp4');
         return `
-            <div class="item" data-index="${i}">
+            <div class="item" data-name="${item.Name}">
                 ${isVideo 
                     ? `<video src="images/${item.Preview}" muted loop playsinline></video>` 
                     : `<img src="images/${item.Preview}">`
@@ -52,18 +84,27 @@ function renderGrid() {
         `;
     }).join('');
 
-    // Контроль видео при наведении
+    // 4. Навешиваем события на новые элементы
     document.querySelectorAll('.item').forEach(el => {
+        const itemName = el.dataset.name;
+        const itemData = items.find(it => it.Name === itemName);
         const video = el.querySelector('video');
+        
         if (video) {
             el.onmouseenter = () => video.play();
-            el.onmouseleave = () => { video.pause(); video.currentTime = 0; };
+            el.onmouseleave = () => { 
+                video.pause(); 
+                video.currentTime = 0; 
+            };
         }
-        el.onclick = () => openModal(filtered[el.dataset.index]);
+        
+        el.onclick = () => openModal(itemData);
     });
 }
 
+// Работа с модальным окном
 function openModal(item) {
+    if (!item) return;
     currentItem = item;
     currentImageIndex = 0;
     modalBg.style.display = 'flex';
@@ -72,7 +113,7 @@ function openModal(item) {
 
 function updateModal() {
     const file = currentItem.Images[currentImageIndex];
-    const isVideo = file.endsWith('.mp4');
+    const isVideo = file.endsWith('.mp4') || file.endsWith('.webm');
     
     modalVideo.style.display = isVideo ? 'block' : 'none';
     modalImage.style.display = isVideo ? 'none' : 'block';
@@ -86,10 +127,10 @@ function updateModal() {
 
     modalTitle.innerText = currentItem.Name;
     
-    // Превращаем ссылки в тексте в кликабельные элементы
+    // Форматирование ссылок в описании
     const linkedDesc = currentItem.Description.replace(
         /(https?:\/\/[^\s]+)/g, 
-        '<a href="$1" target="_blank" style="color: var(--accent-color)">$1</a>'
+        '<a href="$1" target="_blank" style="color: var(--accent-color); text-decoration: none;">$1</a>'
     );
     modalDesc.innerHTML = linkedDesc;
 }
@@ -97,6 +138,7 @@ function updateModal() {
 window.closeModal = () => {
     modalBg.style.display = 'none';
     modalVideo.pause();
+    modalVideo.src = ""; // Очистка src для остановки загрузки
 };
 
 window.nextImage = () => {
@@ -109,4 +151,7 @@ window.prevImage = () => {
     updateModal();
 };
 
-modalBg.onclick = (e) => { if(e.target === modalBg) closeModal(); };
+// Закрытие по клику на фон
+modalBg.onclick = (e) => { 
+    if (e.target === modalBg) closeModal(); 
+};
