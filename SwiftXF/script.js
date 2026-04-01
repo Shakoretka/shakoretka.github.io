@@ -63,7 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 productElement.innerHTML = `
                     ${mediaHTML}
                     <div class="product-info">
-                        <h3 class="product-title">${product.title}</h3>
+                        <div class="product-header-row">
+                            <h3 class="product-title">${product.title}</h3>
+                            <img src="images/unity-logo.png" alt="Unity" class="engine-logo" title="Developed for Unity">
+                        </div>
                         <p class="product-desc">${product.description}</p>
                         <div class="product-links">
                             ${createLinksHTML(product.links)}

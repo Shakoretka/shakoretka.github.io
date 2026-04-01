@@ -52,8 +52,7 @@ a {
 }
 
 a:hover {
-    color: var(--accent-hover);
-    text-decoration: underline;
+    color: var(--text-primary);
 }
 
 /* --- ШАПКА --- */
@@ -62,6 +61,14 @@ a:hover {
     flex-direction: column;
     align-items: center;
     margin: 40px 0 80px;
+}
+
+/* Контейнер для заголовка и логотипа */
+.product-header-row {
+    display: flex;
+    justify-content: space-between; /* Разносит заголовок влево, а лого вправо */
+    align-items: center; /* Центрирует по вертикали */
+    margin-bottom: 15px;
 }
 
 .logo {
@@ -186,9 +193,24 @@ a:hover {
     justify-content: center;
 }
 
+.engine-logo {
+    height: 24px; /* Компактный размер */
+    width: auto;
+    opacity: 0.3; /* Делаем его приглушенным */
+    filter: grayscale(1) invert(1); /* Делаем его белым/серым под темную тему */
+    transition: all 0.3s ease;
+}
+
+/* Эффект при наведении на ВСЮ карточку */
+.product-card:hover .engine-logo {
+    opacity: 0.8;
+    filter: grayscale(0) invert(0); /* Можно вернуть родной цвет при наведении, если хочется */
+    transform: scale(1.05);
+}
+
 .product-title {
+    margin-bottom: 0;
     font-size: 2rem;
-    margin-bottom: 15px;
     font-weight: 600;
 }
 
