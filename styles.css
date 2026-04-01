@@ -65,7 +65,7 @@ body {
 .product-title { font-size: 1.8rem; margin-bottom: 15px; }
 .product-desc { color: var(--text-secondary); white-space: pre-wrap; font-size: 0.95rem; }
 
-/* BUTTONS (из Swift FX) */
+/* BUTTONS */
 .btn { 
     display: inline-block; padding: 10px 20px; border: 1px solid var(--accent-color); 
     color: var(--text-primary); font-family: var(--font-mono); text-decoration: none; border-radius: 4px;
@@ -163,7 +163,6 @@ body {
 .clear-btn, 
 #show-all-btn {
     background: transparent;
-    /* Делаем текст и рамку приглушенными (серыми) */
     color: rgba(216, 202, 161, 0.4); 
     border: 1px solid rgba(216, 202, 161, 0.2);
     padding: 8px 16px;
@@ -179,13 +178,13 @@ body {
 .reset-btn:hover, 
 .clear-btn:hover, 
 #show-all-btn:hover {
-    color: var(--accent-color); /* Твой фирменный красный */
+    color: var(--accent-color);
     border-color: var(--accent-color);
-    background: rgba(217, 55, 44, 0.05); /* Едва заметный красный оттенок фона */
-    box-shadow: 0 0 15px rgba(217, 55, 44, 0.2); /* Мягкое свечение */
+    background: rgba(217, 55, 44, 0.05);
+    box-shadow: 0 0 15px rgba(217, 55, 44, 0.2);
 }
 
-/* Контейнер для кнопки "Show All" */
+/* "Show All" */
 .show-more-container {
     display: flex;
     justify-content: center;
@@ -197,7 +196,7 @@ body {
     text-align: center;
 }
 
-/* Секция коммерческого опыта */
+/* EXP */
 .experience-section {
     margin-top: 60px;
     padding: 60px 0;
@@ -222,18 +221,16 @@ body {
 .company-logo,
 .company-logos img,
 .company-logos svg {
-    /* Вместо height: 35px используй диапазон */
     height: auto;
-    max-height: 45px; /* Увеличь лимит для высоких логотипов */
+    max-height: 45px;
     min-height: 25px;
     width: auto;
-    max-width: 120px; /* Ограничь ширину, чтобы длинные не вытесняли других */
-    
-    object-fit: contain; /* Гарантирует, что лого не растянется */
+    max-width: 120px;
+    object-fit: contain;
 }
 
 .logo-tall {
-    transform: scale(1.4); /* Увеличиваем визуальный вес только этого элемента */
+    transform: scale(1.4);
     transform-origin: center;
 }
 
