@@ -66,9 +66,10 @@ a:hover {
 /* Контейнер для заголовка и логотипа */
 .product-header-row {
     display: flex;
-    justify-content: space-between; /* Разносит заголовок влево, а лого вправо */
-    align-items: center; /* Центрирует по вертикали */
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
+    width: 100%;
 }
 
 .logo {
@@ -152,7 +153,7 @@ a:hover {
     min-width: 0;
     min-height: 250px;
     position: relative;
-    background: var(--bg-color); /* Использование переменной */
+    background: var(--bg-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -194,17 +195,19 @@ a:hover {
 }
 
 .engine-logo {
-    height: 24px; /* Компактный размер */
+    height: 24px;
     width: auto;
-    opacity: 0.3; /* Делаем его приглушенным */
-    filter: grayscale(1) invert(1); /* Делаем его белым/серым под темную тему */
-    transition: all 0.3s ease;
+    display: block;
+
+    opacity: 0.3;
+
+    filter: none;
+
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Эффект при наведении на ВСЮ карточку */
 .product-card:hover .engine-logo {
-    opacity: 0.8;
-    filter: grayscale(0) invert(0); /* Можно вернуть родной цвет при наведении, если хочется */
+    opacity: 1;
     transform: scale(1.05);
 }
 
